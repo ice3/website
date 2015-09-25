@@ -1,6 +1,7 @@
 # Pour installer
 
   pip install requirement.txt
+  pelican-quickstart
 
 #Pour compiler
 
