@@ -29,6 +29,14 @@ SOCIAL = (('Twitter', 'http://twitter.com/MatthieuFalce'),
 
 DEFAULT_PAGINATION = 10
 
+#themes :
+# * mediumfox
+# *
+#
+#
+#
+#
+
 THEME=u'mediumfox'
 
 # Uncomment following line if you want document-relative URLs when developing
