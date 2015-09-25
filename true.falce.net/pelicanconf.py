@@ -25,19 +25,22 @@ LINKS = (('Pelican', 'http://getpelican.com/'),
 
 # Social widget
 SOCIAL = (('Twitter', 'http://twitter.com/MatthieuFalce'),
-          ('Another social link', '#'),)
+         )
 
 DEFAULT_PAGINATION = 10
 
 #themes :
-# * mediumfox
-# *
-#
-#
-#
-#
+#  elegant             ++++ (pas de résumé du tout, juste le titre) http://oncrashreboot.com/elegant-best-pelican-theme-features
+#  pelican-twitchy     ++++
+#  aboutwilson         ++++
 
-THEME=u'mediumfox'
+#  cid                 +++ (minimaliste)
+#  nikhil-theme        +++
+#  fresh               +++ (minimaliste)
+#  sundown             +++
+#  svbhack             +++
+
+THEME=u'cid'
 
 # Uncomment following line if you want document-relative URLs when developing
 #RELATIVE_URLS = True
