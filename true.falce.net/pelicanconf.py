@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 AUTHOR = u'Matthieu Falce'
 SITENAME = u'true.falce.net'
-SITEURL = '/'
+SITEURL = ''
 
 PATH = 'content'
 
@@ -16,13 +16,33 @@ DATE_FORMATS = {
     'fr': ('fr_FR.utf8','%d %b %Y'),
 }
 
-
-# Feed generation is usually not desired when developing
-FEED_ALL_ATOM = None
-CATEGORY_FEED_ATOM = None
-TRANSLATION_FEED_ATOM = None
-AUTHOR_FEED_ATOM = None
-AUTHOR_FEED_RSS = None
+MD_EXTENSIONS = ['codehilite(css_class=highlight)', 'extra', 'headerid',
+                'toc(permalink=true)']
+PLUGIN_PATHS = ['./pelican-plugins/']
+PLUGINS = [
+    'sitemap',
+    # 'extract_toc',
+    'tipue_search',
+    'liquid_tags.img',
+    'neighbors',
+    'latex',
+    'related_posts',
+    'assets',
+    'share_post',
+    ]
+SITEMAP = {
+    'format': 'xml',
+    'priorities': {
+        'articles': 0.5,
+        'indexes': 0.5,
+        'pages': 0.5
+    },
+    'changefreqs': {
+        'articles': 'monthly',
+        'indexes': 'daily',
+        'pages': 'monthly'
+    }
+}
 
 # Blogroll
 LINKS = (('Pelican', 'http://getpelican.com/'),
@@ -30,10 +50,9 @@ LINKS = (('Pelican', 'http://getpelican.com/'),
 
 # Social widget
 SOCIAL = (('Twitter', 'http://twitter.com/MatthieuFalce'),
-          ('Github', 'http://github.com/ice3')
+          ('Github', 'http://github.com/ice3'),
+           ('Email', 'mailto:falce.matthieu+contact@gmail.com')
          )
-
-CONTACT = SOCIAL + ("Mail", "falce.matthieu+contact@gmail.com")
 
 DEFAULT_PAGINATION = 10
 
