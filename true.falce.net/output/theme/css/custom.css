@@ -1,0 +1,9 @@
+article {margin-top: 1em;}
+
+.article-content, div.recent-posts-summary p {
+    font: 1em/1.6em 'PT Serif', Georgia, 'Times New Roman', Times, Serif;
+    text-align: justify;
+    margin-top: 0.5em;
+}
+
+
