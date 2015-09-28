@@ -24,7 +24,7 @@ Je ne pense pas être clairement la cible de GoPro, je ne fais pas de saut en wi
 
 Je fais partie des personnes qui n'ont jamais touché de GoPro. Je sais que ça existe, l'on peut faire des pubs pour rebbull qui passent au cinéma avec (du coup, ça doit être plutôt correct niveau qualité) mais c'est tout.
 
-http://ragemag.fr/wp-content/uploads/2013/09/extreme_ironing_useloos_460.jpg
+{% img images/decouverte-de-la-gopro-hero-4/extreme_ironing_useloos_460.jpg Ce que l'auteur ne fait pas. %}
 
 Par contre, je fais de la photo. J'ai un reflex (un vieux D90) du coup, je deviens assez exigeant sur la vitesse et la qualité des photos. Et je n'ai jamais eu de caméscope, je ne suis donc pas trop habitué à manipuler des fichiers vidéos.
 
@@ -36,11 +36,15 @@ L'emballage est plutôt qualitatif. La boite est en 2 parties, une transparente 
 
 A l'ouverture la GoPro est dans sa coque de protection. On a donc affaire à son système de fixation, à base de vis, qui sert à attacher la caméra à presque tout. Au début j'ai rien compris, j'ai galéré mais on s'y fait et c'est bien conçu. C'est facile à attacher et détacher et ça à l'air de bien tenir. 2 attaches à scotch sont fournies, pour les casques.
 
-// photo des attaches
+{% img images/decouverte-de-la-gopro-hero-4/attaches.jpg 300 Les attaches. %}
+
 
 Une fois que l'on a réussit à la défaire, ce qui choque, c'est la taille de la caméra. Avec la coque elle n'est pas très grosse (une grosse boite d'allumettes), mais nue, elle est franchement petite et légère. Plutôt impressionnant pour un truc qui monte à 12M de pixels et filme 4K.
 
-// photo de la caméra
+{% img images/decouverte-de-la-gopro-hero-4/taille1.jpg 300 %}
+
+{% img images/decouverte-de-la-gopro-hero-4/taille2.jpg 300 %}
+
 
 La boite contient donc la GoPro, une housse avec 3 "portes arrières", selon que l'on veut nager très profond (40m), pas trop profond (3m) ou rester sur terre (en gros). L'écran de la caméra est tactile et seule la porte étanche jusqu'à 40m ne permet pas de l'utiliser.
 
@@ -70,6 +74,11 @@ Niveau technique c'est simple mais plutôt réussit. L'objectif est un grand ang
 On ne peut pas régler l'exposition, mais on peut faire une mesure spot, qui adapte l'expo en fonction de la luminosité du centre de l'image. Et on peut sous / sur exposer. On peut régler les iso max à utiliser et la netteté.
 
 On a aussi accès à des modes sympas comme le time lapse (en photo et vidéo), on peut régler l'intervalomètre dans des valeurs définies (1 image toutes les 1-5-10-30 secondes). En vidéo, j'ai testé un couché de soleil et ça rend pas mal, un peu surexposé au début (le soleil n'étant pas au centre), mais il n'y a pas de scintillements, l'expo se refait au poil à chaque fois.
+
+{% img images/decouverte-de-la-gopro-hero-4/nuit1.jpg 500 %}
+{% img images/decouverte-de-la-gopro-hero-4/nuit2.jpg 500 %}
+{% img images/decouverte-de-la-gopro-hero-4/nuit3.jpg 500 %}
+
 
 ## Avis
 
