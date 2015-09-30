@@ -4,112 +4,112 @@ xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitem
 xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
-<loc>/</loc>
-<lastmod>2015-09-28T20:08:37-00:00</lastmod>
+<loc>http://true.falce.net/</loc>
+<lastmod>2015-09-30T15:38:40-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>/archives.html</loc>
-<lastmod>2015-09-28T20:08:37-00:00</lastmod>
+<loc>http://true.falce.net/archives.html</loc>
+<lastmod>2015-09-30T15:38:40-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>/tags.html</loc>
-<lastmod>2015-09-28T20:08:37-00:00</lastmod>
+<loc>http://true.falce.net/tags.html</loc>
+<lastmod>2015-09-30T15:38:40-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>/categories.html</loc>
-<lastmod>2015-09-28T20:08:37-00:00</lastmod>
+<loc>http://true.falce.net/categories.html</loc>
+<lastmod>2015-09-30T15:38:40-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>/decouverte-de-la-gopro-hero-4.html</loc>
+<loc>http://true.falce.net/decouverte-de-la-gopro-hero-4.html</loc>
 <lastmod>2015-09-27T21:32:00+02:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>/bonjour-le-monde.html</loc>
+<loc>http://true.falce.net/bonjour-le-monde.html</loc>
 <lastmod>2015-09-27T19:42:00+02:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>/category/autre.html</loc>
+<loc>http://true.falce.net/category/autre.html</loc>
 <lastmod>2015-09-27T19:42:00+00:09</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>/category/revue.html</loc>
+<loc>http://true.falce.net/category/revue.html</loc>
 <lastmod>2015-09-27T21:32:00+00:09</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>/tag/art.html</loc>
+<loc>http://true.falce.net/tag/art.html</loc>
 <lastmod>2015-09-27T21:32:00+00:09</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>/tag/gopro-hero-4.html</loc>
+<loc>http://true.falce.net/tag/gopro-hero-4.html</loc>
 <lastmod>2015-09-27T21:32:00+00:09</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>/tag/photo.html</loc>
+<loc>http://true.falce.net/tag/photo.html</loc>
 <lastmod>2015-09-27T21:32:00+00:09</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>/tag/monde.html</loc>
+<loc>http://true.falce.net/tag/monde.html</loc>
 <lastmod>2015-09-27T19:42:00+00:09</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>/tag/test.html</loc>
+<loc>http://true.falce.net/tag/test.html</loc>
 <lastmod>2015-09-27T21:32:00+00:09</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>/tag/bonjour.html</loc>
+<loc>http://true.falce.net/tag/bonjour.html</loc>
 <lastmod>2015-09-27T19:42:00+00:09</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>/tag/pas-grand-chose.html</loc>
+<loc>http://true.falce.net/tag/pas-grand-chose.html</loc>
 <lastmod>2015-09-27T19:42:00+00:09</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>/author/matthieu-falce.html</loc>
+<loc>http://true.falce.net/author/matthieu-falce.html</loc>
 <lastmod>2015-09-27T21:32:00+00:09</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>

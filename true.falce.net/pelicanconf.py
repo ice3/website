@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 AUTHOR = u'Matthieu Falce'
 SITENAME = u'true.falce.net'
-SITEURL = ''
+SITEURL = 'localhost:8000'
 
 PATH = 'content'
 
@@ -29,6 +29,7 @@ PLUGINS = [
     'related_posts',
     'assets',
     'share_post',
+    'optimize_images',
     ]
 SITEMAP = {
     'format': 'xml',
@@ -43,7 +44,6 @@ SITEMAP = {
         'pages': 'monthly'
     }
 }
-
 # Blogroll
 LINKS = (('Pelican', 'http://getpelican.com/'),
         )
@@ -68,6 +68,7 @@ DEFAULT_PAGINATION = 10
 #  svbhack             +++
 
 THEME=u'elegant'
+SITESUBTITLE="Parce que false.falce.net c'était moins swag."
 TYPOGRIFY = True
 
 # Uncomment following line if you want document-relative URLs when developing
@@ -77,8 +78,12 @@ INDEX_URL = "true.falce.net"
 CONTACT_URL = "matthieu.falce.net"
 GALLERY_URL = "photos.falce.net"
 
+STATIC_PATHS = ['images']
+
 USE_CUSTOM_MENU = True
 CUSTOM_MENUITEMS = (('Blog', INDEX_URL),
                     ("Contact / A propos", CONTACT_URL),
                     ("Gallerie Photo", GALLERY_URL),
                     )
+
+DISQUS_SITENAME = "falcenet"

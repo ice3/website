@@ -75,6 +75,7 @@ On ne peut pas régler l'exposition, mais on peut faire une mesure spot, qui ada
 
 On a aussi accès à des modes sympas comme le time lapse (en photo et vidéo), on peut régler l'intervalomètre dans des valeurs définies (1 image toutes les 1-5-10-30 secondes). En vidéo, j'ai testé un couché de soleil et ça rend pas mal, un peu surexposé au début (le soleil n'étant pas au centre), mais il n'y a pas de scintillements, l'expo se refait au poil à chaque fois.
 
+<img class="image-process-article-image" src="/images/decouverte-de-la-gopro-hero-4/nuit1.jpg"/>
 {% img images/decouverte-de-la-gopro-hero-4/nuit1.jpg 500 %}
 {% img images/decouverte-de-la-gopro-hero-4/nuit2.jpg 500 %}
 {% img images/decouverte-de-la-gopro-hero-4/nuit3.jpg 500 %}
