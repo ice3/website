@@ -87,3 +87,4 @@ CUSTOM_MENUITEMS = (('Blog', INDEX_URL),
                     )
 
 DISQUS_SITENAME = "falcenet"
+GOOGLE_ANALYTICS="UA-66606415-1"
