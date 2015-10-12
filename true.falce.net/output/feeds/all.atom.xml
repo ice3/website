@@ -1,5 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>true.falce.net</title><link href="http://true.falce.net/" rel="alternate"></link><link href="http://true.falce.net/feeds/all.atom.xml" rel="self"></link><id>http://true.falce.net/</id><updated>2015-09-27T21:32:00+02:00</updated><entry><title>Découverte de la GoPro Hero 4</title><link href="http://true.falce.net/decouverte-de-la-gopro-hero-4.html" rel="alternate"></link><updated>2015-09-27T21:32:00+02:00</updated><author><name>Matthieu Falce</name></author><id>tag:true.falce.net,2015-09-27:decouverte-de-la-gopro-hero-4.html</id><summary type="html">&lt;h2 id="lhistoire"&gt;L&amp;#8217;histoire&lt;a class="headerlink" href="#lhistoire" title="Permanent link"&gt;&amp;para;&lt;/a&gt;&lt;/h2&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>true.falce.net</title><link href="http://true.falce.net/" rel="alternate"></link><link href="http://true.falce.net/feeds/all.atom.xml" rel="self"></link><id>http://true.falce.net/</id><updated>2015-10-12T21:34:00+02:00</updated><entry><title>Comment avoir plusieurs services web sur son serveur ?</title><link href="http://true.falce.net/comment-avoir-plusieurs-services-web-sur-son-serveur.html" rel="alternate"></link><updated>2015-10-12T21:34:00+02:00</updated><author><name>Matthieu Falce</name></author><id>tag:true.falce.net,2015-10-12:comment-avoir-plusieurs-services-web-sur-son-serveur.html</id><summary type="html">&lt;p&gt;C&amp;#8217;est le genre de questions bêtes que l&amp;#8217;on se pose quand on débute. Les tutoriels parlent de configuration de serveurs et on ne comprend pas l&amp;#8217;intérêt&amp;nbsp;réel.&lt;/p&gt;
+&lt;p&gt;La philosophie de l&amp;#8217;article est plus de découvrir le principe que de fournir une solution clef en main&amp;nbsp;:)&lt;/p&gt;
+&lt;h2 id="le-probleme"&gt;Le problème&lt;a class="headerlink" href="#le-probleme" title="Permanent link"&gt;&amp;para;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;J&amp;#8217;ai un serveur web (un ordinateur), sur lequel tourne un serveur web (un logiciel, &lt;span class="caps"&gt;NGINX&lt;/span&gt;) qui sert mon site web, sur le port 80&amp;nbsp;donc.&lt;/p&gt;
+&lt;p&gt;Maintenant imaginons que je veuille développer une application web, en Python/Flask par exemple. L&amp;#8217;application va écouter sur un certain port, disons &lt;code&gt;12345&lt;/code&gt;. Je peux y accéder en faisant &lt;code&gt;http://monip:12345&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Bon jusque là rien de nouveau sous le soleil. Mais ce n&amp;#8217;est pas très sérieux&amp;nbsp;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;ça fait peut aux gens d&amp;#8217;accéder à un port précis, ils n&amp;#8217;ont pas l&amp;#8217;habitude et ne se connecterons&amp;nbsp;pas&lt;/li&gt;
+&lt;li&gt;c&amp;#8217;est plus simple de se souvenir d&amp;#8217;un nom que d&amp;#8217;un chiffre&amp;nbsp;aléatoire&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Une meilleure solution c&amp;#8217;est d&amp;#8217;accéder à &lt;code&gt;http://monip/monapp&lt;/code&gt; ou &lt;code&gt;http://monapp.monip&lt;/code&gt; plutôt que sur un port. Sauf que le serveur web est déjà attaché au port 80 et qu&amp;#8217;un seul processus peut se connecter sur un&amp;nbsp;port.&lt;/p&gt;
+&lt;h2 id="la-solution"&gt;La solution&lt;a class="headerlink" href="#la-solution" title="Permanent link"&gt;&amp;para;&lt;/a&gt;&lt;/h2&gt;
+&lt;h3 id="pre-requis"&gt;Pré-requis&lt;a class="headerlink" href="#pre-requis" title="Permanent link"&gt;&amp;para;&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Je pars du principe que vous utilisez un Linux et avez &lt;a href="https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-14-04-lts"&gt;installé un serveur web&lt;/a&gt; (&lt;span class="caps"&gt;NGINX&lt;/span&gt; ou Apache) qui fonctionne. Même si vous n&amp;#8217;avez encore rien configuré parce que vous ne pigez rien aux tutos. Les examples se baseront sur &lt;span class="caps"&gt;NGINX&lt;/span&gt;.&lt;/p&gt;
+&lt;h3 id="un-proxy-inverse"&gt;&lt;a href="https://fr.wikipedia.org/wiki/Proxy_inverse"&gt;Un proxy inverse&lt;/a&gt;&lt;a class="headerlink" href="#un-proxy-inverse" title="Permanent link"&gt;&amp;para;&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;&lt;img src="images/reverse_proxy.svg" alt="Schema expliquant le fonctionnement d'un reverse proxy (source: wikipedia)" title="Schema expliquant le fonctionnement d'un reverse proxy (source: wikipedia)"&gt;&lt;/p&gt;
+&lt;p&gt;Nous allons utiliser un reverse proxy géré par votre serveur&amp;nbsp;web.&lt;/p&gt;
+&lt;p&gt;Mais c&amp;#8217;est quoi donc&amp;nbsp;?&lt;/p&gt;
+&lt;p&gt;C&amp;#8217;est simple, le proxy va recevoir toutes les requêtes (les &lt;span class="caps"&gt;URL&lt;/span&gt; tapées par les visiteurs) et va les transmettre à un serveur web selon certaines&amp;nbsp;règles.&lt;/p&gt;
+&lt;p&gt;Pour comprendre les exemples, il faut partir du principe que les connexions reçues par le proxy ne contiennent plus le nom de domaine. C&amp;#8217;est à dire, pour &lt;span class="caps"&gt;NGINX&lt;/span&gt; &lt;code&gt;www.monsite.com/maPage&lt;/code&gt; sera vu comme &lt;code&gt;/maPage&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Voilà un exemple pour &lt;span class="caps"&gt;NGINX&lt;/span&gt;. Il faut rajouter ces directives dans un fichier de configuration dans &lt;code&gt;/etc/nginx/site-available/&lt;/code&gt;, dans un bloc &lt;code&gt;server&lt;/code&gt; :&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nt"&gt;location&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="n"&gt;proxy_pass&lt;/span&gt; &lt;span class="n"&gt;http&lt;/span&gt;&lt;span class="o"&gt;://&lt;/span&gt;&lt;span class="n"&gt;localhost&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="m"&gt;12345&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Ainsi, toutes les requêtes commençant par &lt;code&gt;/&lt;/code&gt; (c&amp;#8217;est à dire toutes) seront renvoyées au port &lt;code&gt;12345&lt;/code&gt; (ce qui est intéressant si vous utilisez des sous domaines par&amp;nbsp;exemple).&lt;/p&gt;
+&lt;p&gt;Dans le cas où vous voulez transférer les connexions sur &lt;code&gt;/monapp&lt;/code&gt; vers le port &lt;code&gt;12345&lt;/code&gt;, vous devrez avoir une règle dans le genre&amp;nbsp;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nt"&gt;location&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nt"&gt;monapp&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="n"&gt;proxy_pass&lt;/span&gt;  &lt;span class="n"&gt;http&lt;/span&gt;&lt;span class="o"&gt;://&lt;/span&gt;&lt;span class="m"&gt;127&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="m"&gt;12345&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Dans ce cas, une &lt;span class="caps"&gt;URL&lt;/span&gt; vers &lt;code&gt;monip/monapp/page1&lt;/code&gt; sera transmise vers &lt;code&gt;127.0.01:12345/page1&lt;/code&gt; (avec 127.0.0.1, le localhost du&amp;nbsp;serveur).&lt;/p&gt;
+&lt;p&gt;Attention, n&amp;#8217;oubliez pas le &lt;code&gt;/&lt;/code&gt; final, il permet d&amp;#8217;éliminer le &lt;code&gt;/monapp&lt;/code&gt; de l&amp;#8217;&lt;span class="caps"&gt;URL&lt;/span&gt;. Grâce à lui votre application écoutant sur le port &lt;code&gt;12345&lt;/code&gt; pourra analyser ses &lt;span class="caps"&gt;URL&lt;/span&gt; à partir de la racine comme si rien ne s&amp;#8217;était&amp;nbsp;passé.&lt;/p&gt;
+&lt;h3 id="les-variables-speciales"&gt;Les variables spéciales&lt;a class="headerlink" href="#les-variables-speciales" title="Permanent link"&gt;&amp;para;&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Comme on le voit sur le schéma, le proxy est situé sur votre réseau et va transmettre les requêtes, ce qui modifier les headers &lt;span class="caps"&gt;HTTP&lt;/span&gt;. Du coup, vous ne pouvez plus savoir quelle est l&amp;#8217;&lt;span class="caps"&gt;IP&lt;/span&gt; de votre visiteur par exemple, vu qu&amp;#8217;elle sera remplacée par celle indiquée dans le &lt;code&gt;proxy_pass&lt;/code&gt; (le plus souvent&amp;nbsp;127.0.0.1).&lt;/p&gt;
+&lt;p&gt;Dans ce cas, vous pouvez rajouter des variables qui permettent de remodifier le&amp;nbsp;header.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="x"&gt;location /monapp/ &lt;/span&gt;&lt;span class="err"&gt;{&lt;/span&gt;&lt;span class="x"&gt;&lt;/span&gt;
+&lt;span class="x"&gt;    ...&lt;/span&gt;
+&lt;span class="x"&gt;    proxy_set_header Host &lt;/span&gt;&lt;span class="p"&gt;$&lt;/span&gt;&lt;span class="nv"&gt;host&lt;/span&gt;&lt;span class="x"&gt;;&lt;/span&gt;
+&lt;span class="x"&gt;    proxy_set_header X-Real-IP &lt;/span&gt;&lt;span class="p"&gt;$&lt;/span&gt;&lt;span class="nv"&gt;remote_addr&lt;/span&gt;&lt;span class="x"&gt;;&lt;/span&gt;
+&lt;span class="x"&gt;    proxy_set_header X-Forwarded-For &lt;/span&gt;&lt;span class="p"&gt;$&lt;/span&gt;&lt;span class="nv"&gt;proxy_add_x_forwarded_for&lt;/span&gt;&lt;span class="x"&gt;;&lt;/span&gt;
+&lt;span class="x"&gt;    ...&lt;/span&gt;
+&lt;span class="x"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2 id="conclusion"&gt;Conclusion&lt;a class="headerlink" href="#conclusion" title="Permanent link"&gt;&amp;para;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;L&amp;#8217;exemple complet&amp;nbsp;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nt"&gt;location&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nt"&gt;monapp&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="n"&gt;proxy_pass&lt;/span&gt;  &lt;span class="n"&gt;http&lt;/span&gt;&lt;span class="o"&gt;://&lt;/span&gt;&lt;span class="m"&gt;127&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="m"&gt;12345&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="n"&gt;proxy_set_header&lt;/span&gt; &lt;span class="n"&gt;Host&lt;/span&gt; &lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;host&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="n"&gt;proxy_set_header&lt;/span&gt; &lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;Real&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;IP&lt;/span&gt; &lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;remote_addr&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="n"&gt;proxy_set_header&lt;/span&gt; &lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;Forwarded&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;For&lt;/span&gt; &lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;proxy_add_x_forwarded_for&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Finalement, il est assez aisé de faire fonctionner plusieurs services web sur son serveur en utilisant &lt;span class="caps"&gt;NGINX&lt;/span&gt;. De plus, la configuration est assez aisé, 10 lignes à rajouter dans un fichier au&amp;nbsp;maximum.&lt;/p&gt;
+&lt;p&gt;Il ne faut donc pas se laisser dépasser par la complexité relative de &lt;span class="caps"&gt;NGINX&lt;/span&gt;, ou d&amp;#8217;un serveur web en général (il y a des centaines de directives et de&amp;nbsp;variables).&lt;/p&gt;
+&lt;p&gt;Il faut juste y aller petit à petit et se concentrer sur une configuration à la&amp;nbsp;fois.&lt;/p&gt;
+&lt;h2 id="pour-aller-plus-loin"&gt;Pour aller plus loin&lt;a class="headerlink" href="#pour-aller-plus-loin" title="Permanent link"&gt;&amp;para;&lt;/a&gt;&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.nginx.com/resources/admin-guide/serving-static-content/"&gt;nous pouvons servir des contenus statiques avec &lt;code&gt;location&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://nginx.org/en/docs/beginners_guide.html#proxy"&gt;un tutoriel pour débutants (en&amp;nbsp;anglais)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_set_header"&gt;pour en savoir plus sur les variables du &lt;code&gt;proxy_set_header&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</summary><category term="NGINX"></category><category term="Apache"></category><category term="serveur web"></category><category term="proxy"></category><category term="dev web"></category></entry><entry><title>Découverte de la GoPro Hero 4</title><link href="http://true.falce.net/decouverte-de-la-gopro-hero-4.html" rel="alternate"></link><updated>2015-09-27T21:32:00+02:00</updated><author><name>Matthieu Falce</name></author><id>tag:true.falce.net,2015-09-27:decouverte-de-la-gopro-hero-4.html</id><summary type="html">&lt;h2 id="lhistoire"&gt;L&amp;#8217;histoire&lt;a class="headerlink" href="#lhistoire" title="Permanent link"&gt;&amp;para;&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Je suis allé à l&amp;#8217;&lt;span class="caps"&gt;OVH&lt;/span&gt; Summit 2015 à Paris. C&amp;#8217;était bien sympa, bien que je ne pense pas être la cible de l&amp;#8217;événement avec mes 30€ de dépenses par&amp;nbsp;an&amp;#8230;&lt;/p&gt;
 &lt;p&gt;Une des choses qui a rendu l&amp;#8217;événement sympa c&amp;#8217;est les tirages au sort et tombolas, organisés par Cisco, Intel et d&amp;#8217;autres boites que je ne connais&amp;nbsp;pas.&lt;/p&gt;
 &lt;p&gt;J&amp;#8217;ai joué. Et j&amp;#8217;ai gagné&amp;nbsp;\o/&lt;/p&gt;
@@ -38,8 +107,7 @@
 &lt;p&gt;Niveau technique c&amp;#8217;est simple mais plutôt réussit. L&amp;#8217;objectif est un grand angle, ce qui a des avantages (on voit plein de choses, les déformations) et des inconvénients (les déformations, tout ce qui est à plus de 4m sera minuscule). Oui, les déformations sont un avantage et un inconvénient :) En mode film, on peut avoir un champ de vision plus étroit, je pense que la caméra ne prend que les pixels centraux du capteur (on n&amp;#8217;a plus accès à la&amp;nbsp;4K).&lt;/p&gt;
 &lt;p&gt;On ne peut pas régler l&amp;#8217;exposition, mais on peut faire une mesure spot, qui adapte l&amp;#8217;expo en fonction de la luminosité du centre de l&amp;#8217;image. Et on peut sous / sur exposer. On peut régler les iso max à utiliser et la&amp;nbsp;netteté.&lt;/p&gt;
 &lt;p&gt;On a aussi accès à des modes sympas comme le time lapse (en photo et vidéo), on peut régler l&amp;#8217;intervalomètre dans des valeurs définies (1 image toutes les 1-5-10-30 secondes). En vidéo, j&amp;#8217;ai testé un couché de soleil et ça rend pas mal, un peu surexposé au début (le soleil n&amp;#8217;étant pas au centre), mais il n&amp;#8217;y a pas de scintillements, l&amp;#8217;expo se refait au poil à chaque&amp;nbsp;fois.&lt;/p&gt;
-&lt;p&gt;&lt;img class="image-process-article-image" src="/images/decouverte-de-la-gopro-hero-4/nuit1.jpg"/&gt;
-&lt;img width="500" src="images/decouverte-de-la-gopro-hero-4/nuit1.jpg"&gt;
+&lt;p&gt;&lt;img width="500" src="images/decouverte-de-la-gopro-hero-4/nuit1.jpg"&gt;
 &lt;img width="500" src="images/decouverte-de-la-gopro-hero-4/nuit2.jpg"&gt;
 &lt;img width="500" src="images/decouverte-de-la-gopro-hero-4/nuit3.jpg"&gt;&lt;/p&gt;
 &lt;h2 id="avis"&gt;Avis&lt;a class="headerlink" href="#avis" title="Permanent link"&gt;&amp;para;&lt;/a&gt;&lt;/h2&gt;
