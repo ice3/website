@@ -2,9 +2,9 @@ Title:A la découverte de netcat
 Date: 2015-10-22 11:03
 Tags:Dev, Dev web, netcat
 Category:Admin Sys
-Summary:
-Subtitle:
-Status: draft
+Summary: Un outil bien puissant mais méconnu pour aider votre programmation réseau.
+Subtitle: C'est comme `cat` mais pour le réseau...
+Status: published
 
 Aujourd'hui faisons la découverte du merveilleux outils `netcat` ou le *couteau suisse du développement web*.
 
