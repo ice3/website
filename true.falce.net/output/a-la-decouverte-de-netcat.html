@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="author" content="Matthieu Falce" />
+        <meta name="copyright" content="Matthieu Falce" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="Dev, Dev web, netcat, Admin Sys, " />
+
+<meta property="og:title" content="A la découverte de netcat  - C&#39;est comme `cat` mais pour le réseau... "/>
+<meta property="og:url" content="http://true.falce.net/a-la-decouverte-de-netcat.html" />
+<meta property="og:description" content="Un outil bien puissant mais méconnu pour aider votre programmation réseau." />
+<meta property="og:site_name" content="true.falce.net" />
+<meta property="og:article:author" content="Matthieu Falce" />
+<meta property="og:article:published_time" content="2015-10-22T11:03:00+02:00" />
+<meta name="twitter:title" content="A la découverte de netcat  - C&#39;est comme `cat` mais pour le réseau... ">
+<meta name="twitter:description" content="Un outil bien puissant mais méconnu pour aider votre programmation réseau.">
+
+        <title>A la découverte de netcat  - C&#39;est comme `cat` mais pour le réseau...  · true.falce.net
+</title>
+        <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.1/css/font-awesome.css" rel="stylesheet">
+<link rel="stylesheet" href="http://true.falce.net/theme/css/style.min.css?e05f43fa">
+        <link href="http://true.falce.net/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="true.falce.net - Full Atom Feed" />
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-66606415-1', 'auto');
+    ga('send', 'pageview');
+</script>
+    </head>
+    <body>
+        <div id="content-sans-footer">
+        <div class="navbar navbar-static-top">
+            <div class="navbar-inner">
+                <div class="container-fluid">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </a>
+                    <a class="brand" href="http://true.falce.net/"><span class=site-name>true.falce.net</span></a>
+                    <div class="nav-collapse collapse">
+                        <ul class="nav pull-right top-menu">
+                            <li ><a href="http://true.falce.net/">Home</a></li>
+                            <li ><a href="http://true.falce.net/categories.html">Categories</a></li>
+                            <li ><a href="http://true.falce.net/tags.html">Tags</a></li>
+                            <li ><a href="http://true.falce.net/archives.html">Archives</a></li>
+                            <li><form class="navbar-search" action="http://true.falce.net/search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span1"></div>
+                <div class="span10">
+<article>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+    <h1><a href="http://true.falce.net/a-la-decouverte-de-netcat.html"> A la découverte de&nbsp;netcat  <small> C'est comme `cat` mais pour le réseau... </small>  </a></h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+
+            
+            <p>Aujourd&#8217;hui faisons la découverte du merveilleux outils <code>netcat</code> ou le <em>couteau suisse du développement web</em>.</p>
+<p>Cet application est très pratique quand on fait de la programmation réseau, pour déboguer, mais aussi pour les admins&nbsp;sys.</p>
+<p>Par exemple, a chaque fois que j&#8217;ai fait de la prog réseau, tout était fragile : un socket qui n&#8217;écoute qu&#8217;en local, un parefeu capricieux, une interface réseau qui fait n&#8217;importe quoi et plus rien ne marche sans savoir d&#8217;où ça peut venir. Et le débug n&#8217;est pas évident en réseau, c&#8217;est là que l&#8217;on est content d&#8217;avoir <code>netcat</code>.</p>
+<h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
+<p><code>netcat</code> n&#8217;est pas installé par défaut sur certains linux. Il existe 2 versions, qui malheureusement n&#8217;acceptent pas les même options : <code>netcat-openbsd</code> et <code>netcat-traditional</code>.</p>
+<p>Vous pouvez savoir lequel est installé en&nbsp;faisant</p>
+<div class="highlight"><pre>netcat
+</pre></div>
+
+
+<p>Et la réponse devrait être quelque chose du genre (ubuntu&nbsp;14.04):</p>
+<div class="highlight"><pre>This is nc from the netcat-openbsd package. An alternative nc is available
+in the netcat-traditional package.
+usage: nc <span class="o">[</span>-46bCDdhjklnrStUuvZz<span class="o">]</span> <span class="o">[</span>-I length<span class="o">]</span> <span class="o">[</span>-i interval<span class="o">]</span> <span class="o">[</span>-O length<span class="o">]</span>
+    <span class="o">[</span>-P proxy_username<span class="o">]</span> <span class="o">[</span>-p source_port<span class="o">]</span> <span class="o">[</span>-q seconds<span class="o">]</span> <span class="o">[</span>-s <span class="nb">source</span><span class="o">]</span>
+    <span class="o">[</span>-T toskeyword<span class="o">]</span> <span class="o">[</span>-V rtable<span class="o">]</span> <span class="o">[</span>-w timeout<span class="o">]</span> <span class="o">[</span>-X proxy_protocol<span class="o">]</span>
+    <span class="o">[</span>-x proxy_address<span class="o">[</span>:port<span class="o">]]</span> <span class="o">[</span>destination<span class="o">]</span> <span class="o">[</span>port<span class="o">]</span>
+</pre></div>
+
+
+<p>Dans ce cas, on a&#8230; la version&nbsp;openbsd.</p>
+<p>Pour passer d&#8217;une version à une autre, il suffit de faire&nbsp;:</p>
+<div class="highlight"><pre>apt-get remove netcat-traditional
+apt-get install netcat-openbsd
+</pre></div>
+
+
+<p>Dans ce tutoriel, nous utiliserons <code>netcat-openbsd</code>.</p>
+<h3 id="et-pour-windows">Et pour windows ?<a class="headerlink" href="#et-pour-windows" title="Permanent link">&para;</a></h3>
+<p>Il existe une version windows, je vous laisse la trouver&nbsp;:p</p>
+<h2 id="utilisation-basique">Utilisation basique<a class="headerlink" href="#utilisation-basique" title="Permanent link">&para;</a></h2>
+<p>On va faire un petit tchat en ligne de commandes. En 2 lignes. La classe&nbsp;quoi.</p>
+<p>En réseau il s&#8217;agit souvent d&#8217;une communication entre en serveur et un client. Comme au restaurant, le serveur écoute le client qui lui demande des choses et un serveur peu servir plusieurs clients (mais en se concentrant sur un seul à la&nbsp;fois).</p>
+<p>Par défaut <code>netcat</code> effectue ses connexions en <span class="caps">TCP</span>, mais il est possible de les passer en <span class="caps">UDP</span> en rajoutant l&#8217;option <code>-u</code>.</p>
+<h3 id="serveur">Serveur<a class="headerlink" href="#serveur" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre>netcat -l 9876
+</pre></div>
+
+
+<p>Crée un serveur (l&#8217;option <code>-l</code>) qui écoute sur le port&nbsp;9876</p>
+<h3 id="client">Client<a class="headerlink" href="#client" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre>netcat localhost 9876
+</pre></div>
+
+
+<p>Crée un client qui se connecte à <code>localhost</code> sur le port&nbsp;9876.</p>
+<h3 id="tchat">Tchat<a class="headerlink" href="#tchat" title="Permanent link">&para;</a></h3>
+<p>Pour faire un tchat, il suffit d&#8217;ouvrir 2 terminaux, de créer un serveur et un client. Les commandes ne devraient pas rendre la main et vous pouvez taper du texte, appuyer sur entrée et le voir s&#8217;afficher sur l&#8217;autre&nbsp;terminal.</p>
+<p>Pour terminer, appuyez sur <code>Ctrl-C</code>, fermer le client ou le serveur va déconnecter l&#8217;autre&nbsp;automatiquement.</p>
+<p>N&#8217;oubliez pas, il faut lancer le serveur en premier puis créer un&nbsp;client.</p>
+<p>Essayez maintenant de lancer un autre client, il ne peut pas se connecter. <code>netcat</code> ne permet pas d&#8217;avoir de connections concurrentes, si vous en avez besoin, il faut utiliser d&#8217;autres&nbsp;outils.</p>
+<h3 id="remarque">Remarque<a class="headerlink" href="#remarque" title="Permanent link">&para;</a></h3>
+<p>Vu que les communications passent par <span class="caps">TCP</span> ou <span class="caps">UDP</span>, on n&#8217;est pas obligé d&#8217;utiliser netcat de chaque côté, il suffit d&#8217;utiliser une connexion&nbsp;socket.</p>
+<p>Vous pouvez donc déboguer vos codes Python ou C ou n&#8217;importe quoi avec des sockets en utilisant le tchat. C&#8217;est très pratique pour savoir s&#8217;il y a des problèmes au niveau de caractères (rajoutés ou supprimés) ou bien si des connexions se ferment alors qu&#8217;elles ne devraient&nbsp;pas.</p>
+<h3 id="application-savoir-si-vous-etes-bloques-par-un-parefeu">Application : savoir si vous êtes bloqués par un parefeu<a class="headerlink" href="#application-savoir-si-vous-etes-bloques-par-un-parefeu" title="Permanent link">&para;</a></h3>
+<p>On peut utiliser ce tchat pour savoir si un parefeu vous bloque ou s&#8217;il y a un problème quelconque au niveau de la connexion. Pour rappel, les pare-feu peuvent être sortant ou entrant, et un port qui laisse passer dans un sens et pas dans l&#8217;autre peut être assez long à&nbsp;déboguer.</p>
+<p>Voilà comment faire&nbsp;:</p>
+<ul>
+<li>vous avez un ordinateur accessible par une <span class="caps">IP</span> sur internet, on va l&#8217;appeler S et un ordinateur qui veux y accéder, que l&#8217;on va appeler&nbsp;A.</li>
+<li>vous pingez S depuis A. Si ça ne marche pas il y a un problème de&nbsp;connexion.</li>
+<li>vous lancez un serveur <code>netcat</code> sur S sur le port&nbsp;d&#8217;intérêt.</li>
+<li>vous lancez un client sur A vers l&#8217;<span class="caps">IP</span> de S avec le bon port. Si le client n&#8217;arrive pas à se connecter c&#8217;est que le port est bloqué en entré, sinon c&#8217;est&nbsp;bon</li>
+<li>vous essayez d&#8217;écrire depuis S sur A si ça marche, il n&#8217;y a pas de pare-feu&nbsp;sortant.</li>
+</ul>
+<p>Bon après, on peut faire un nmap aussi, mais je ne me souviens jamais de la ligne de commande à&nbsp;faire&#8230;</p>
+<h2 id="utilisation-plus-avancee">Utilisation plus avancée<a class="headerlink" href="#utilisation-plus-avancee" title="Permanent link">&para;</a></h2>
+<p>Tester des pare-feu, c&#8217;est sympa, mais on peu faire&nbsp;plus.</p>
+<h3 id="debug-de-serveur-web">Débug de serveur web<a class="headerlink" href="#debug-de-serveur-web" title="Permanent link">&para;</a></h3>
+<p>Si vous utilisez un serveur web avec un proxy inverse ou des réécritures d&#8217;<span class="caps">URL</span>, vous pouvez avoir envie de tester s&#8217;il est réglé correctement, au niveau des <span class="caps">URL</span> ou des header <span class="caps">HTTP</span> par&nbsp;exemple.</p>
+<p>Il suffit de faire un serveur en netcat et de se connecter sur l&#8217;<span class="caps">URL</span> ou le port avec un navigateur pour voir les header <span class="caps">HTTP</span>.</p>
+<p>Voilà un exemple avec firefox sur un Ubuntu (connexion sur localhost:8855)&nbsp;:</p>
+<div class="highlight"><pre><span class="err">➭</span> <span class="nt">nc</span> <span class="nt">-l</span> <span class="nt">8855</span>
+<span class="nt">GET</span> <span class="o">/</span> <span class="nt">HTTP</span><span class="o">/</span><span class="nt">1</span><span class="nc">.1</span>
+<span class="nt">Host</span><span class="o">:</span> <span class="nt">localhost</span><span class="nd">:8855</span>
+<span class="nt">User-Agent</span><span class="o">:</span> <span class="nt">Mozilla</span><span class="o">/</span><span class="nt">5</span><span class="nc">.0</span> <span class="o">(</span><span class="nt">X11</span><span class="o">;</span> <span class="nt">Ubuntu</span><span class="o">;</span> <span class="nt">Linux</span> <span class="nt">x86_64</span><span class="o">;</span> <span class="nt">rv</span><span class="nd">:40</span><span class="nc">.0</span><span class="o">)</span> <span class="nt">Gecko</span><span class="o">/</span><span class="nt">20100101</span> <span class="nt">Firefox</span><span class="o">/</span><span class="nt">40</span><span class="nc">.0</span>
+<span class="nt">Accept</span><span class="o">:</span> <span class="nt">text</span><span class="o">/</span><span class="nt">html</span><span class="o">,</span><span class="nt">application</span><span class="o">/</span><span class="nt">xhtml</span><span class="o">+</span><span class="nt">xml</span><span class="o">,</span><span class="nt">application</span><span class="o">/</span><span class="nt">xml</span><span class="o">;</span><span class="nt">q</span><span class="o">=</span><span class="nt">0</span><span class="nc">.9</span><span class="o">,*/*;</span><span class="nt">q</span><span class="o">=</span><span class="nt">0</span><span class="nc">.8</span>
+<span class="nt">Accept-Language</span><span class="o">:</span> <span class="nt">en-US</span><span class="o">,</span><span class="nt">en</span><span class="o">;</span><span class="nt">q</span><span class="o">=</span><span class="nt">0</span><span class="nc">.5</span>
+<span class="nt">Accept-Encoding</span><span class="o">:</span> <span class="nt">gzip</span><span class="o">,</span> <span class="nt">deflate</span>
+<span class="nt">Connection</span><span class="o">:</span> <span class="nt">keep-alive</span>
+</pre></div>
+
+
+<p>Exemple d&#8217;une connexion sur localhost:8855/une-autre-<span class="caps">URL</span></p>
+<div class="highlight"><pre><span class="err">➭</span> <span class="nt">nc</span> <span class="nt">-l</span> <span class="nt">8855</span>
+<span class="nt">GET</span> <span class="o">/</span><span class="nt">une-autre-URL</span> <span class="nt">HTTP</span><span class="o">/</span><span class="nt">1</span><span class="nc">.1</span>
+<span class="nt">Host</span><span class="o">:</span> <span class="nt">localhost</span><span class="nd">:8855</span>
+<span class="nt">User-Agent</span><span class="o">:</span> <span class="nt">Mozilla</span><span class="o">/</span><span class="nt">5</span><span class="nc">.0</span> <span class="o">(</span><span class="nt">X11</span><span class="o">;</span> <span class="nt">Ubuntu</span><span class="o">;</span> <span class="nt">Linux</span> <span class="nt">x86_64</span><span class="o">;</span> <span class="nt">rv</span><span class="nd">:40</span><span class="nc">.0</span><span class="o">)</span> <span class="nt">Gecko</span><span class="o">/</span><span class="nt">20100101</span> <span class="nt">Firefox</span><span class="o">/</span><span class="nt">40</span><span class="nc">.0</span>
+<span class="nt">Accept</span><span class="o">:</span> <span class="nt">text</span><span class="o">/</span><span class="nt">html</span><span class="o">,</span><span class="nt">application</span><span class="o">/</span><span class="nt">xhtml</span><span class="o">+</span><span class="nt">xml</span><span class="o">,</span><span class="nt">application</span><span class="o">/</span><span class="nt">xml</span><span class="o">;</span><span class="nt">q</span><span class="o">=</span><span class="nt">0</span><span class="nc">.9</span><span class="o">,*/*;</span><span class="nt">q</span><span class="o">=</span><span class="nt">0</span><span class="nc">.8</span>
+<span class="nt">Accept-Language</span><span class="o">:</span> <span class="nt">en-US</span><span class="o">,</span><span class="nt">en</span><span class="o">;</span><span class="nt">q</span><span class="o">=</span><span class="nt">0</span><span class="nc">.5</span>
+<span class="nt">Accept-Encoding</span><span class="o">:</span> <span class="nt">gzip</span><span class="o">,</span> <span class="nt">deflate</span>
+<span class="nt">Connection</span><span class="o">:</span> <span class="nt">keep-alive</span>
+</pre></div>
+
+
+<p>Comme <code>netcat</code> se ferme à chaque connexion, on peut utiliser la commande suivante pour la rouvrir automatiquement&nbsp;:</p>
+<div class="highlight"><pre><span class="k">while</span> <span class="nb">true</span> <span class="p">;</span> <span class="k">do</span> nc -l PORT <span class="p">;</span> <span class="k">done</span>
+</pre></div>
+
+
+<h3 id="partager-des-fichiers">Partager des fichiers<a class="headerlink" href="#partager-des-fichiers" title="Permanent link">&para;</a></h3>
+<p><code>netcat</code> permettant d&#8217;ouvrir des communications réseau et de faire passer du texte, on peut aussi faire passer des fichiers d&#8217;un ordinateur à un autre&nbsp;:</p>
+<ul>
+<li>sur le serveur&nbsp;:</li>
+</ul>
+<div class="highlight"><pre>cat backup.iso | nc -l 3333
+</pre></div>
+
+
+<ul>
+<li>sur le client&nbsp;:</li>
+</ul>
+<div class="highlight"><pre>nc IP_SERVEUR 3333 &gt; backup.iso
+</pre></div>
+
+
+<p>Le seul problème c&#8217;est que l&#8217;on ne peut pas savoir où en est le téléchargement. Dans ce cas, on peut faire&nbsp;:</p>
+<ul>
+<li>sur le serveur&nbsp;:</li>
+</ul>
+<div class="highlight"><pre>pv backup.iso | nc -l 3333
+</pre></div>
+
+
+<ul>
+<li>sur le client&nbsp;:</li>
+</ul>
+<div class="highlight"><pre>nc IP_SERVEUR 3333 |pv &gt; backup.iso
+</pre></div>
+
+
+<p>Avec <a href="http://linux.die.net/man/1/pv">pv</a> qui est l&#8217;utilitaire <code>pipe view</code> (à installer) qui permet d&#8217;afficher des barres de&nbsp;progressions.</p>
+<h3 id="ssh-hopping"><span class="caps">SSH</span> hopping<a class="headerlink" href="#ssh-hopping" title="Permanent link">&para;</a></h3>
+<p>Imaginons le cas suivant pour une connexion <span class="caps">SSH</span>&nbsp;:</p>
+<ul>
+<li>vous avez un serveur publique : <em><span class="caps">GW</span></em>, accessible par internet, qui sert de porte d&#8217;entrée sur votre réseau privé, un&nbsp;Gateway</li>
+<li>vous avez un serveur sur un réseau privé : <em>SPr</em>, qui ne sont pas accessible par internet, mais <em><span class="caps">GW</span></em> peut y&nbsp;accéder</li>
+</ul>
+<p>Si vous voulez vous connecter à <em>SPr</em> par <code>ssh</code>, vous devez faire une connexion à <em><span class="caps">GW</span></em> puis une autre à <em>SPr</em>. C&#8217;est long et ça peut amener à faire des erreurs. Il faudrait une façon automatique de sauter de <em><span class="caps">GW</span></em> à <em>Spr</em>, de faire un &#8216;hop&#8217; entre les deux (d&#8217;où le nom de la technique)&nbsp;.</p>
+<p>Dans ce cas, vous pouvez utiliser <code>netcat</code> dans votre <code>~/.ssh/config</code> :</p>
+<div class="highlight"><pre><span class="l-Scalar-Plain">Host GW</span>
+  <span class="l-Scalar-Plain">HostName GW.example.com</span>
+
+<span class="l-Scalar-Plain">Host SPr</span>
+  <span class="l-Scalar-Plain">ProxyCommand ssh -q GW nc -q0 SPr 22</span>
+</pre></div>
+
+
+<p>Le <code>proxycommand</code> signifie que <code>ssh SPr</code> va en fait exécuter <code>ssh -q GW nc -q0 SPr 22</code>. Donc execute une connexion <code>ssh</code> classique sur <em><span class="caps">GW</span></em> puis une fois connecté, fait un <code>nc</code> sur le port 22 du <em>SPr</em>. Comme le port 22 est le port classique pour <code>ssh</code>, tout ce qui passe dans le premier <code>ssh</code> sera transmit à la 2ème&nbsp;machine.</p>
+<h2 id="bonus">Bonus<a class="headerlink" href="#bonus" title="Permanent link">&para;</a></h2>
+<h3 id="un-outil-de-supervision">Un outil de supervision<a class="headerlink" href="#un-outil-de-supervision" title="Permanent link">&para;</a></h3>
+<p>Vous utilisez <code>Munin</code> ou un truc dans le genre pour savoir les ressources utilisées par vos serveurs ou les processus qui tournent ? Laissez tomber et utilisez netcat&nbsp;!</p>
+<p>On peut afficher le résultat d&#8217;un <code>top</code> dans une page web&nbsp;:</p>
+<div class="highlight"><pre><span class="o">(</span>
+  <span class="nb">trap</span> <span class="s2">&quot;exit&quot;</span> INT <span class="p">;</span>
+  <span class="k">while</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="k">do</span>
+      top -b  -n1 <span class="p">|</span> nc -l <span class="m">8855</span> <span class="p">;</span>
+  <span class="k">done</span>
+<span class="o">)</span>
+</pre></div>
+
+
+<p><code>top -b  -n1</code> permet d&#8217;avoir une sortie récupérable (et non pas interactive) pour <code>top</code>.</p>
+<p>Le <code>trap "exit" INT</code> permet de quitter le programme, sinon il ignore les interruptions avec <code>Ctrl-C</code>.</p>
+<h3 id="nginx-cest-surfait-utilisons-nc"><span class="caps">NGINX</span> c&#8217;est surfait, utilisons nc :)<a class="headerlink" href="#nginx-cest-surfait-utilisons-nc" title="Permanent link">&para;</a></h3>
+<p>On peut servir une page statique avec <code>netcat</code> pour remplacer vite fait un serveur web en rade. Bon, ça sert juste du <span class="caps">HTML</span>, sans autres ressources et ça sert la même chose sur toutes les <span class="caps">URL</span> mais ça dépanne&nbsp;:</p>
+<p>On peut tester quelque chose comme ça&nbsp;:</p>
+<div class="highlight"><pre><span class="k">while</span> <span class="nb">true</span> <span class="p">;</span>
+  <span class="k">do</span> nc -l <span class="m">80</span> &lt; index.html <span class="p">;</span>
+<span class="k">done</span>
+</pre></div>
+
+
+<p>Cependant, le navigateur affiche le texte sans faire le rendu <span class="caps">HTML</span>. <code>netcat</code> ne respectant pas <span class="caps">HTTP</span> de base, il faut rajouter un header <span class="caps">HTTP</span> minimum : <code>"HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n"</code></p>
+<div class="highlight"><pre><span class="o">(</span>
+  <span class="nb">trap</span> <span class="s2">&quot;exit&quot;</span> INT <span class="p">;</span>
+  <span class="k">while</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="k">do</span>
+    <span class="o">{</span>
+      <span class="nb">echo</span> <span class="s2">&quot;HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n&quot;</span> <span class="p">;</span>
+      cat index.html
+    <span class="o">}</span> <span class="p">|</span> nc -l <span class="m">8855</span> <span class="p">;</span>
+  <span class="k">done</span>
+<span class="o">)</span>
+</pre></div>
+
+
+<h2 id="pour-aller-plus-loin">Pour aller plus loin :<a class="headerlink" href="#pour-aller-plus-loin" title="Permanent link">&para;</a></h2>
+<ul>
+<li>vous pouvez installer <code>netcat-traditional</code> et jouer avec les options <code>-e</code> et <code>-c</code></li>
+<li>on peut utiliser netcat comme scanner de&nbsp;ports</li>
+<li>on peut crypter les communications en passant la connexion dans un <span class="caps">SSH</span> ou en utilisant d&#8217;autres&nbsp;outils</li>
+<li>Avec des <span class="caps">FIFO</span>, on peut faire un &#8220;man-in-the-middle&#8221; pour avoir tous les logs navigateur et serveur dans un fichier tout en continuant à servir le site&nbsp;normalements</li>
+<li>allez, faites un skype du pauvre avec netcat&nbsp;!</li>
+</ul>
+<h2 id="sources">Sources<a class="headerlink" href="#sources" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="http://stackoverflow.com/questions/12266898/start-netcat-server">Lien <span class="caps">SO</span> expliquant comment passer d&#8217;une version traditionelle à une version&nbsp;bsd.</a></li>
+<li><a href="http://askubuntu.com/questions/311447/how-do-i-ssh-to-machine-a-via-b-in-one-command">Lien askubuntu sur le ssh&nbsp;hopping</a></li>
+<li><a href="http://sshmenu.sourceforge.net/articles/transparent-mulithop.html">Plus d&#8217;infos sur le multi&nbsp;hop</a></li>
+<li><a href="http://www.g-loaded.eu/2006/11/06/netcat-a-couple-of-useful-examples/">Quelques utilisations de netcat, j&#8217;en ai repris la&nbsp;plupart</a></li>
+<li><a href="http://www.thegeekstuff.com/2009/10/how-to-capture-unix-top-command-output-to-a-file-in-readable-format/">Capture de&nbsp;top</a></li>
+<li><a href="http://www.commandlinefu.com/commands/view/9164/one-command-line-web-server-on-port-80-using-nc-netcat">Inspiration pour le serveur web en&nbsp;nc</a></li>
+<li><a href="https://news.ycombinator.com/item?id=1873386">Cool stuff to do with netcat sur <span class="caps">HN</span></a></li>
+<li><a href="http://www.stearns.org/doc/nc-intro.current.html">Inspiration pour le serveur web qui fonctionne, proxy <span class="caps">TCP</span></a></li>
+</ul>
+<p>J&#8217;espère avoir pu vous faire partager la puissance de cet outil. Il ne vous reste plus qu&#8217;à utiliser <code>nc</code> pour vos débugs réseau et autres geekeries&nbsp;;)</p>
+<p>Si vous avez d&#8217;autres techniques, n&#8217;hésitez pas à les partager en&nbsp;commentaire.</p>
+            <section>
+    <p id="post-share-links">
+    Share on:
+    <a href="http://twitter.com/home?status=A%20la%20d%C3%A9couverte%20de%C2%A0netcat%20C%27est%20comme%20%60cat%60%20mais%20pour%20le%20r%C3%A9seau...%20http%3A//true.falce.net/a-la-decouverte-de-netcat.html" target="_blank" title="Share on Twitter">Twitter</a>
+    ❄
+    <a href="http://www.facebook.com/sharer/sharer.php?s=100&amp;p%5Burl%5D=http%3A//true.falce.net/a-la-decouverte-de-netcat.html" target="_blank" title="Share on Facebook">Facebook</a>
+    ❄
+    <a href="https://plus.google.com/share?url=http%3A//true.falce.net/a-la-decouverte-de-netcat.html" target="_blank" title="Share on Google Plus">Google+</a>
+    ❄
+    <a href="mailto:?subject=A%20la%20d%C3%A9couverte%20de%C2%A0netcat%20C%27est%20comme%20%60cat%60%20mais%20pour%20le%20r%C3%A9seau...&amp;body=http%3A//true.falce.net/a-la-decouverte-de-netcat.html" target="_blank" title="Share via Email">Email</a>
+    </p>
+</section>
+
+            <section>
+<div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle disqus-comment-count" data-toggle="collapse" data-parent="#accordion2"
+                href="http://true.falce.net/a-la-decouverte-de-netcat.html#disqus_thread">
+                Comments
+            </a>
+        </div>
+        <div id="disqus_thread" class="accordion-body collapse">
+            <div class="accordion-inner">
+                <div class="comments">
+                    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'falcenet';
+        var disqus_identifier = 'http://true.falce.net/a-la-decouverte-de-netcat.html';
+    var disqus_url = 'http://true.falce.net/a-la-decouverte-de-netcat.html';
+
+    (function() {
+         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+         dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+     })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+
+            <hr/>
+<section>
+    <h2>Related Posts</h2>
+<ul class="related-posts-list">
+<li><a href="http://true.falce.net/comment-avoir-plusieurs-services-web-sur-son-serveur.html" title="Comment avoir plusieurs services web sur son serveur ? - En utilisant un &#34;reverse proxy&#34; pardi">Comment avoir plusieurs services web sur son serveur ? <small>En utilisant un "reverse proxy" pardi</small></a></li>
+</ul>
+<hr />
+</section>
+            <aside>
+            <nav>
+            <ul class="articles-timeline">
+                <li class="previous-article">« <a href="http://true.falce.net/comment-avoir-plusieurs-services-web-sur-son-serveur.html" title="Previous: Comment avoir plusieurs services web sur son serveur ? - En utilisant un &#34;reverse proxy&#34; pardi">Comment avoir plusieurs services web sur son serveur ? <small>En utilisant un "reverse proxy" pardi</small></a></li>
+            </ul>
+            </nav>
+            </aside>
+        </div>
+        <section>
+        <div class="span2" style="float:right;font-size:0.9em;">
+            <h4>Published</h4>
+            <time pubdate="pubdate" datetime="2015-10-22T11:03:00+02:00">oct. 22, 2015</time>
+            <h4>Category</h4>
+            <a class="category-link" href="http://true.falce.net/categories.html#admin-sys-ref">Admin Sys</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="http://true.falce.net/tags.html#dev-ref">Dev
+                    <span>1</span>
+</a></li>
+                <li><a href="http://true.falce.net/tags.html#dev-web-ref">Dev web
+                    <span>2</span>
+</a></li>
+                <li><a href="http://true.falce.net/tags.html#netcat-ref">netcat
+                    <span>1</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+    <a href="http://twitter.com/MatthieuFalce" title="My Twitter Profile" class="sidebar-social-links" target="_blank">
+    <i class="fa fa-twitter sidebar-social-links"></i></a>
+    <a href="http://github.com/ice3" title="My Github Profile" class="sidebar-social-links" target="_blank">
+    <i class="fa fa-github sidebar-social-links"></i></a>
+    <a href="mailto:falce.matthieu+contact@gmail.com" title="My Email Address" class="sidebar-social-links" target="_blank">
+    <i class="fa fa-envelope sidebar-social-links"></i></a>
+        </div>
+        </section>
+</div>
+</article>
+                </div>
+                <div class="span1"></div>
+            </div>
+        </div>
+        <div id="push"></div>
+    </div>
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-subtitle"><span class="site-name">true.falce.net</span> - Parce que false.falce.net c'était moins swag.</li>
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a></li>
+    </ul>
+</div>
+</footer>            <script src="http://code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+            <script type="text/javascript">
+var disqus_shortname = 'falcenet';
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
+<script  language="javascript" type="text/javascript">
+function uncollapse() {
+    if (window.location.hash.match(/^#comment-\d+$/)) {
+        $('#disqus_thread').collapse('show');
+    }
+}
+</script>
+<script type="text/javascript" language="JavaScript">
+uncollapse();
+window.onhashchange=function(){
+    if (window.location.hash.match(/^#comment-\d+$/))
+        window.location.reload(true);
+}
+</script>
+<script>
+$('#disqus_thread').on('shown', function () {
+    var link = document.getElementsByClassName('accordion-toggle');
+    var old_innerHTML = link[0].innerHTML;
+    $(link[0]).fadeOut(500, function() {
+        $(this).text('Click here to hide comments').fadeIn(500);
+    });
+    $('#disqus_thread').on('hidden', function () {
+        $(link[0]).fadeOut(500, function() {
+            $(this).text(old_innerHTML).fadeIn(500);
+        });
+    })
+})
+</script>
+
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+    License : http://oncrashreboot.com/pelican-elegant -->
+</html>

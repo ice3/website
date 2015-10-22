@@ -1,5 +1,212 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>true.falce.net</title><link>http://true.falce.net/</link><description>Parce que false.falce.net c'était moins swag.</description><atom:link href="http://true.falce.net/feeds/matthieu-falce.rss.xml" rel="self"></atom:link><lastBuildDate>Mon, 12 Oct 2015 21:34:00 +0200</lastBuildDate><item><title>Comment avoir plusieurs services web sur son serveur ?</title><link>http://true.falce.net/comment-avoir-plusieurs-services-web-sur-son-serveur.html</link><description>&lt;p&gt;C&amp;#8217;est le genre de questions bêtes que l&amp;#8217;on se pose quand on débute. Les tutoriels parlent de configuration de serveurs et on ne comprend pas l&amp;#8217;intérêt&amp;nbsp;réel.&lt;/p&gt;
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>true.falce.net</title><link>http://true.falce.net/</link><description>Parce que false.falce.net c'était moins swag.</description><atom:link href="http://true.falce.net/feeds/matthieu-falce.rss.xml" rel="self"></atom:link><lastBuildDate>Thu, 22 Oct 2015 11:03:00 +0200</lastBuildDate><item><title>A la découverte de netcat</title><link>http://true.falce.net/a-la-decouverte-de-netcat.html</link><description>&lt;p&gt;Aujourd&amp;#8217;hui faisons la découverte du merveilleux outils &lt;code&gt;netcat&lt;/code&gt; ou le &lt;em&gt;couteau suisse du développement web&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;Cet application est très pratique quand on fait de la programmation réseau, pour déboguer, mais aussi pour les admins&amp;nbsp;sys.&lt;/p&gt;
+&lt;p&gt;Par exemple, a chaque fois que j&amp;#8217;ai fait de la prog réseau, tout était fragile : un socket qui n&amp;#8217;écoute qu&amp;#8217;en local, un parefeu capricieux, une interface réseau qui fait n&amp;#8217;importe quoi et plus rien ne marche sans savoir d&amp;#8217;où ça peut venir. Et le débug n&amp;#8217;est pas évident en réseau, c&amp;#8217;est là que l&amp;#8217;on est content d&amp;#8217;avoir &lt;code&gt;netcat&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id="installation"&gt;Installation&lt;a class="headerlink" href="#installation" title="Permanent link"&gt;&amp;para;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;netcat&lt;/code&gt; n&amp;#8217;est pas installé par défaut sur certains linux. Il existe 2 versions, qui malheureusement n&amp;#8217;acceptent pas les même options : &lt;code&gt;netcat-openbsd&lt;/code&gt; et &lt;code&gt;netcat-traditional&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Vous pouvez savoir lequel est installé en&amp;nbsp;faisant&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;netcat
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Et la réponse devrait être quelque chose du genre (ubuntu&amp;nbsp;14.04):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;This is nc from the netcat-openbsd package. An alternative nc is available
+in the netcat-traditional package.
+usage: nc &lt;span class="o"&gt;[&lt;/span&gt;-46bCDdhjklnrStUuvZz&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;-I length&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;-i interval&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;-O length&lt;span class="o"&gt;]&lt;/span&gt;
+    &lt;span class="o"&gt;[&lt;/span&gt;-P proxy_username&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;-p source_port&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;-q seconds&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;-s &lt;span class="nb"&gt;source&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
+    &lt;span class="o"&gt;[&lt;/span&gt;-T toskeyword&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;-V rtable&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;-w timeout&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;-X proxy_protocol&lt;span class="o"&gt;]&lt;/span&gt;
+    &lt;span class="o"&gt;[&lt;/span&gt;-x proxy_address&lt;span class="o"&gt;[&lt;/span&gt;:port&lt;span class="o"&gt;]]&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;destination&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;port&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Dans ce cas, on a&amp;#8230; la version&amp;nbsp;openbsd.&lt;/p&gt;
+&lt;p&gt;Pour passer d&amp;#8217;une version à une autre, il suffit de faire&amp;nbsp;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;apt-get remove netcat-traditional
+apt-get install netcat-openbsd
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Dans ce tutoriel, nous utiliserons &lt;code&gt;netcat-openbsd&lt;/code&gt;.&lt;/p&gt;
+&lt;h3 id="et-pour-windows"&gt;Et pour windows ?&lt;a class="headerlink" href="#et-pour-windows" title="Permanent link"&gt;&amp;para;&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Il existe une version windows, je vous laisse la trouver&amp;nbsp;:p&lt;/p&gt;
+&lt;h2 id="utilisation-basique"&gt;Utilisation basique&lt;a class="headerlink" href="#utilisation-basique" title="Permanent link"&gt;&amp;para;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;On va faire un petit tchat en ligne de commandes. En 2 lignes. La classe&amp;nbsp;quoi.&lt;/p&gt;
+&lt;p&gt;En réseau il s&amp;#8217;agit souvent d&amp;#8217;une communication entre en serveur et un client. Comme au restaurant, le serveur écoute le client qui lui demande des choses et un serveur peu servir plusieurs clients (mais en se concentrant sur un seul à la&amp;nbsp;fois).&lt;/p&gt;
+&lt;p&gt;Par défaut &lt;code&gt;netcat&lt;/code&gt; effectue ses connexions en &lt;span class="caps"&gt;TCP&lt;/span&gt;, mais il est possible de les passer en &lt;span class="caps"&gt;UDP&lt;/span&gt; en rajoutant l&amp;#8217;option &lt;code&gt;-u&lt;/code&gt;.&lt;/p&gt;
+&lt;h3 id="serveur"&gt;Serveur&lt;a class="headerlink" href="#serveur" title="Permanent link"&gt;&amp;para;&lt;/a&gt;&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;netcat -l 9876
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Crée un serveur (l&amp;#8217;option &lt;code&gt;-l&lt;/code&gt;) qui écoute sur le port&amp;nbsp;9876&lt;/p&gt;
+&lt;h3 id="client"&gt;Client&lt;a class="headerlink" href="#client" title="Permanent link"&gt;&amp;para;&lt;/a&gt;&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;netcat localhost 9876
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Crée un client qui se connecte à &lt;code&gt;localhost&lt;/code&gt; sur le port&amp;nbsp;9876.&lt;/p&gt;
+&lt;h3 id="tchat"&gt;Tchat&lt;a class="headerlink" href="#tchat" title="Permanent link"&gt;&amp;para;&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Pour faire un tchat, il suffit d&amp;#8217;ouvrir 2 terminaux, de créer un serveur et un client. Les commandes ne devraient pas rendre la main et vous pouvez taper du texte, appuyer sur entrée et le voir s&amp;#8217;afficher sur l&amp;#8217;autre&amp;nbsp;terminal.&lt;/p&gt;
+&lt;p&gt;Pour terminer, appuyez sur &lt;code&gt;Ctrl-C&lt;/code&gt;, fermer le client ou le serveur va déconnecter l&amp;#8217;autre&amp;nbsp;automatiquement.&lt;/p&gt;
+&lt;p&gt;N&amp;#8217;oubliez pas, il faut lancer le serveur en premier puis créer un&amp;nbsp;client.&lt;/p&gt;
+&lt;p&gt;Essayez maintenant de lancer un autre client, il ne peut pas se connecter. &lt;code&gt;netcat&lt;/code&gt; ne permet pas d&amp;#8217;avoir de connections concurrentes, si vous en avez besoin, il faut utiliser d&amp;#8217;autres&amp;nbsp;outils.&lt;/p&gt;
+&lt;h3 id="remarque"&gt;Remarque&lt;a class="headerlink" href="#remarque" title="Permanent link"&gt;&amp;para;&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Vu que les communications passent par &lt;span class="caps"&gt;TCP&lt;/span&gt; ou &lt;span class="caps"&gt;UDP&lt;/span&gt;, on n&amp;#8217;est pas obligé d&amp;#8217;utiliser netcat de chaque côté, il suffit d&amp;#8217;utiliser une connexion&amp;nbsp;socket.&lt;/p&gt;
+&lt;p&gt;Vous pouvez donc déboguer vos codes Python ou C ou n&amp;#8217;importe quoi avec des sockets en utilisant le tchat. C&amp;#8217;est très pratique pour savoir s&amp;#8217;il y a des problèmes au niveau de caractères (rajoutés ou supprimés) ou bien si des connexions se ferment alors qu&amp;#8217;elles ne devraient&amp;nbsp;pas.&lt;/p&gt;
+&lt;h3 id="application-savoir-si-vous-etes-bloques-par-un-parefeu"&gt;Application : savoir si vous êtes bloqués par un parefeu&lt;a class="headerlink" href="#application-savoir-si-vous-etes-bloques-par-un-parefeu" title="Permanent link"&gt;&amp;para;&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;On peut utiliser ce tchat pour savoir si un parefeu vous bloque ou s&amp;#8217;il y a un problème quelconque au niveau de la connexion. Pour rappel, les pare-feu peuvent être sortant ou entrant, et un port qui laisse passer dans un sens et pas dans l&amp;#8217;autre peut être assez long à&amp;nbsp;déboguer.&lt;/p&gt;
+&lt;p&gt;Voilà comment faire&amp;nbsp;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;vous avez un ordinateur accessible par une &lt;span class="caps"&gt;IP&lt;/span&gt; sur internet, on va l&amp;#8217;appeler S et un ordinateur qui veux y accéder, que l&amp;#8217;on va appeler&amp;nbsp;A.&lt;/li&gt;
+&lt;li&gt;vous pingez S depuis A. Si ça ne marche pas il y a un problème de&amp;nbsp;connexion.&lt;/li&gt;
+&lt;li&gt;vous lancez un serveur &lt;code&gt;netcat&lt;/code&gt; sur S sur le port&amp;nbsp;d&amp;#8217;intérêt.&lt;/li&gt;
+&lt;li&gt;vous lancez un client sur A vers l&amp;#8217;&lt;span class="caps"&gt;IP&lt;/span&gt; de S avec le bon port. Si le client n&amp;#8217;arrive pas à se connecter c&amp;#8217;est que le port est bloqué en entré, sinon c&amp;#8217;est&amp;nbsp;bon&lt;/li&gt;
+&lt;li&gt;vous essayez d&amp;#8217;écrire depuis S sur A si ça marche, il n&amp;#8217;y a pas de pare-feu&amp;nbsp;sortant.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Bon après, on peut faire un nmap aussi, mais je ne me souviens jamais de la ligne de commande à&amp;nbsp;faire&amp;#8230;&lt;/p&gt;
+&lt;h2 id="utilisation-plus-avancee"&gt;Utilisation plus avancée&lt;a class="headerlink" href="#utilisation-plus-avancee" title="Permanent link"&gt;&amp;para;&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Tester des pare-feu, c&amp;#8217;est sympa, mais on peu faire&amp;nbsp;plus.&lt;/p&gt;
+&lt;h3 id="debug-de-serveur-web"&gt;Débug de serveur web&lt;a class="headerlink" href="#debug-de-serveur-web" title="Permanent link"&gt;&amp;para;&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Si vous utilisez un serveur web avec un proxy inverse ou des réécritures d&amp;#8217;&lt;span class="caps"&gt;URL&lt;/span&gt;, vous pouvez avoir envie de tester s&amp;#8217;il est réglé correctement, au niveau des &lt;span class="caps"&gt;URL&lt;/span&gt; ou des header &lt;span class="caps"&gt;HTTP&lt;/span&gt; par&amp;nbsp;exemple.&lt;/p&gt;
+&lt;p&gt;Il suffit de faire un serveur en netcat et de se connecter sur l&amp;#8217;&lt;span class="caps"&gt;URL&lt;/span&gt; ou le port avec un navigateur pour voir les header &lt;span class="caps"&gt;HTTP&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;Voilà un exemple avec firefox sur un Ubuntu (connexion sur localhost:8855)&amp;nbsp;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="err"&gt;➭&lt;/span&gt; &lt;span class="nt"&gt;nc&lt;/span&gt; &lt;span class="nt"&gt;-l&lt;/span&gt; &lt;span class="nt"&gt;8855&lt;/span&gt;
+&lt;span class="nt"&gt;GET&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="nt"&gt;HTTP&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nt"&gt;1&lt;/span&gt;&lt;span class="nc"&gt;.1&lt;/span&gt;
+&lt;span class="nt"&gt;Host&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nt"&gt;localhost&lt;/span&gt;&lt;span class="nd"&gt;:8855&lt;/span&gt;
+&lt;span class="nt"&gt;User-Agent&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nt"&gt;Mozilla&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nt"&gt;5&lt;/span&gt;&lt;span class="nc"&gt;.0&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nt"&gt;X11&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="nt"&gt;Ubuntu&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="nt"&gt;Linux&lt;/span&gt; &lt;span class="nt"&gt;x86_64&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="nt"&gt;rv&lt;/span&gt;&lt;span class="nd"&gt;:40&lt;/span&gt;&lt;span class="nc"&gt;.0&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="nt"&gt;Gecko&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nt"&gt;20100101&lt;/span&gt; &lt;span class="nt"&gt;Firefox&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nt"&gt;40&lt;/span&gt;&lt;span class="nc"&gt;.0&lt;/span&gt;
+&lt;span class="nt"&gt;Accept&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nt"&gt;text&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nt"&gt;html&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="nt"&gt;application&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nt"&gt;xhtml&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="nt"&gt;xml&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="nt"&gt;application&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nt"&gt;xml&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;&lt;span class="nt"&gt;q&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nt"&gt;0&lt;/span&gt;&lt;span class="nc"&gt;.9&lt;/span&gt;&lt;span class="o"&gt;,*/*;&lt;/span&gt;&lt;span class="nt"&gt;q&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nt"&gt;0&lt;/span&gt;&lt;span class="nc"&gt;.8&lt;/span&gt;
+&lt;span class="nt"&gt;Accept-Language&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nt"&gt;en-US&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="nt"&gt;en&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;&lt;span class="nt"&gt;q&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nt"&gt;0&lt;/span&gt;&lt;span class="nc"&gt;.5&lt;/span&gt;
+&lt;span class="nt"&gt;Accept-Encoding&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nt"&gt;gzip&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="nt"&gt;deflate&lt;/span&gt;
+&lt;span class="nt"&gt;Connection&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nt"&gt;keep-alive&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Exemple d&amp;#8217;une connexion sur localhost:8855/une-autre-&lt;span class="caps"&gt;URL&lt;/span&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="err"&gt;➭&lt;/span&gt; &lt;span class="nt"&gt;nc&lt;/span&gt; &lt;span class="nt"&gt;-l&lt;/span&gt; &lt;span class="nt"&gt;8855&lt;/span&gt;
+&lt;span class="nt"&gt;GET&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nt"&gt;une-autre-URL&lt;/span&gt; &lt;span class="nt"&gt;HTTP&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nt"&gt;1&lt;/span&gt;&lt;span class="nc"&gt;.1&lt;/span&gt;
+&lt;span class="nt"&gt;Host&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nt"&gt;localhost&lt;/span&gt;&lt;span class="nd"&gt;:8855&lt;/span&gt;
+&lt;span class="nt"&gt;User-Agent&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nt"&gt;Mozilla&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nt"&gt;5&lt;/span&gt;&lt;span class="nc"&gt;.0&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nt"&gt;X11&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="nt"&gt;Ubuntu&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="nt"&gt;Linux&lt;/span&gt; &lt;span class="nt"&gt;x86_64&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt; &lt;span class="nt"&gt;rv&lt;/span&gt;&lt;span class="nd"&gt;:40&lt;/span&gt;&lt;span class="nc"&gt;.0&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="nt"&gt;Gecko&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nt"&gt;20100101&lt;/span&gt; &lt;span class="nt"&gt;Firefox&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nt"&gt;40&lt;/span&gt;&lt;span class="nc"&gt;.0&lt;/span&gt;
+&lt;span class="nt"&gt;Accept&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nt"&gt;text&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nt"&gt;html&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="nt"&gt;application&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nt"&gt;xhtml&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="nt"&gt;xml&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="nt"&gt;application&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nt"&gt;xml&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;&lt;span class="nt"&gt;q&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nt"&gt;0&lt;/span&gt;&lt;span class="nc"&gt;.9&lt;/span&gt;&lt;span class="o"&gt;,*/*;&lt;/span&gt;&lt;span class="nt"&gt;q&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nt"&gt;0&lt;/span&gt;&lt;span class="nc"&gt;.8&lt;/span&gt;
+&lt;span class="nt"&gt;Accept-Language&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nt"&gt;en-US&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="nt"&gt;en&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;&lt;span class="nt"&gt;q&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nt"&gt;0&lt;/span&gt;&lt;span class="nc"&gt;.5&lt;/span&gt;
+&lt;span class="nt"&gt;Accept-Encoding&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nt"&gt;gzip&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="nt"&gt;deflate&lt;/span&gt;
+&lt;span class="nt"&gt;Connection&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nt"&gt;keep-alive&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Comme &lt;code&gt;netcat&lt;/code&gt; se ferme à chaque connexion, on peut utiliser la commande suivante pour la rouvrir automatiquement&amp;nbsp;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;while&lt;/span&gt; &lt;span class="nb"&gt;true&lt;/span&gt; &lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; nc -l PORT &lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;done&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3 id="partager-des-fichiers"&gt;Partager des fichiers&lt;a class="headerlink" href="#partager-des-fichiers" title="Permanent link"&gt;&amp;para;&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;netcat&lt;/code&gt; permettant d&amp;#8217;ouvrir des communications réseau et de faire passer du texte, on peut aussi faire passer des fichiers d&amp;#8217;un ordinateur à un autre&amp;nbsp;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;sur le serveur&amp;nbsp;:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;cat backup.iso | nc -l 3333
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;sur le client&amp;nbsp;:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;nc IP_SERVEUR 3333 &amp;gt; backup.iso
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Le seul problème c&amp;#8217;est que l&amp;#8217;on ne peut pas savoir où en est le téléchargement. Dans ce cas, on peut faire&amp;nbsp;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;sur le serveur&amp;nbsp;:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;pv backup.iso | nc -l 3333
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;sur le client&amp;nbsp;:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;nc IP_SERVEUR 3333 |pv &amp;gt; backup.iso
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Avec &lt;a href="http://linux.die.net/man/1/pv"&gt;pv&lt;/a&gt; qui est l&amp;#8217;utilitaire &lt;code&gt;pipe view&lt;/code&gt; (à installer) qui permet d&amp;#8217;afficher des barres de&amp;nbsp;progressions.&lt;/p&gt;
+&lt;h3 id="ssh-hopping"&gt;&lt;span class="caps"&gt;SSH&lt;/span&gt; hopping&lt;a class="headerlink" href="#ssh-hopping" title="Permanent link"&gt;&amp;para;&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Imaginons le cas suivant pour une connexion &lt;span class="caps"&gt;SSH&lt;/span&gt;&amp;nbsp;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;vous avez un serveur publique : &lt;em&gt;&lt;span class="caps"&gt;GW&lt;/span&gt;&lt;/em&gt;, accessible par internet, qui sert de porte d&amp;#8217;entrée sur votre réseau privé, un&amp;nbsp;Gateway&lt;/li&gt;
+&lt;li&gt;vous avez un serveur sur un réseau privé : &lt;em&gt;SPr&lt;/em&gt;, qui ne sont pas accessible par internet, mais &lt;em&gt;&lt;span class="caps"&gt;GW&lt;/span&gt;&lt;/em&gt; peut y&amp;nbsp;accéder&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Si vous voulez vous connecter à &lt;em&gt;SPr&lt;/em&gt; par &lt;code&gt;ssh&lt;/code&gt;, vous devez faire une connexion à &lt;em&gt;&lt;span class="caps"&gt;GW&lt;/span&gt;&lt;/em&gt; puis une autre à &lt;em&gt;SPr&lt;/em&gt;. C&amp;#8217;est long et ça peut amener à faire des erreurs. Il faudrait une façon automatique de sauter de &lt;em&gt;&lt;span class="caps"&gt;GW&lt;/span&gt;&lt;/em&gt; à &lt;em&gt;Spr&lt;/em&gt;, de faire un &amp;#8216;hop&amp;#8217; entre les deux (d&amp;#8217;où le nom de la technique)&amp;nbsp;.&lt;/p&gt;
+&lt;p&gt;Dans ce cas, vous pouvez utiliser &lt;code&gt;netcat&lt;/code&gt; dans votre &lt;code&gt;~/.ssh/config&lt;/code&gt; :&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="l-Scalar-Plain"&gt;Host GW&lt;/span&gt;
+  &lt;span class="l-Scalar-Plain"&gt;HostName GW.example.com&lt;/span&gt;
+
+&lt;span class="l-Scalar-Plain"&gt;Host SPr&lt;/span&gt;
+  &lt;span class="l-Scalar-Plain"&gt;ProxyCommand ssh -q GW nc -q0 SPr 22&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Le &lt;code&gt;proxycommand&lt;/code&gt; signifie que &lt;code&gt;ssh SPr&lt;/code&gt; va en fait exécuter &lt;code&gt;ssh -q GW nc -q0 SPr 22&lt;/code&gt;. Donc execute une connexion &lt;code&gt;ssh&lt;/code&gt; classique sur &lt;em&gt;&lt;span class="caps"&gt;GW&lt;/span&gt;&lt;/em&gt; puis une fois connecté, fait un &lt;code&gt;nc&lt;/code&gt; sur le port 22 du &lt;em&gt;SPr&lt;/em&gt;. Comme le port 22 est le port classique pour &lt;code&gt;ssh&lt;/code&gt;, tout ce qui passe dans le premier &lt;code&gt;ssh&lt;/code&gt; sera transmit à la 2ème&amp;nbsp;machine.&lt;/p&gt;
+&lt;h2 id="bonus"&gt;Bonus&lt;a class="headerlink" href="#bonus" title="Permanent link"&gt;&amp;para;&lt;/a&gt;&lt;/h2&gt;
+&lt;h3 id="un-outil-de-supervision"&gt;Un outil de supervision&lt;a class="headerlink" href="#un-outil-de-supervision" title="Permanent link"&gt;&amp;para;&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Vous utilisez &lt;code&gt;Munin&lt;/code&gt; ou un truc dans le genre pour savoir les ressources utilisées par vos serveurs ou les processus qui tournent ? Laissez tomber et utilisez netcat&amp;nbsp;!&lt;/p&gt;
+&lt;p&gt;On peut afficher le résultat d&amp;#8217;un &lt;code&gt;top&lt;/code&gt; dans une page web&amp;nbsp;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;(&lt;/span&gt;
+  &lt;span class="nb"&gt;trap&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;exit&amp;quot;&lt;/span&gt; INT &lt;span class="p"&gt;;&lt;/span&gt;
+  &lt;span class="k"&gt;while&lt;/span&gt; &lt;span class="nb"&gt;true&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="k"&gt;do&lt;/span&gt;
+      top -b  -n1 &lt;span class="p"&gt;|&lt;/span&gt; nc -l &lt;span class="m"&gt;8855&lt;/span&gt; &lt;span class="p"&gt;;&lt;/span&gt;
+  &lt;span class="k"&gt;done&lt;/span&gt;
+&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;code&gt;top -b  -n1&lt;/code&gt; permet d&amp;#8217;avoir une sortie récupérable (et non pas interactive) pour &lt;code&gt;top&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Le &lt;code&gt;trap "exit" INT&lt;/code&gt; permet de quitter le programme, sinon il ignore les interruptions avec &lt;code&gt;Ctrl-C&lt;/code&gt;.&lt;/p&gt;
+&lt;h3 id="nginx-cest-surfait-utilisons-nc"&gt;&lt;span class="caps"&gt;NGINX&lt;/span&gt; c&amp;#8217;est surfait, utilisons nc :)&lt;a class="headerlink" href="#nginx-cest-surfait-utilisons-nc" title="Permanent link"&gt;&amp;para;&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;On peut servir une page statique avec &lt;code&gt;netcat&lt;/code&gt; pour remplacer vite fait un serveur web en rade. Bon, ça sert juste du &lt;span class="caps"&gt;HTML&lt;/span&gt;, sans autres ressources et ça sert la même chose sur toutes les &lt;span class="caps"&gt;URL&lt;/span&gt; mais ça dépanne&amp;nbsp;:&lt;/p&gt;
+&lt;p&gt;On peut tester quelque chose comme ça&amp;nbsp;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;while&lt;/span&gt; &lt;span class="nb"&gt;true&lt;/span&gt; &lt;span class="p"&gt;;&lt;/span&gt;
+  &lt;span class="k"&gt;do&lt;/span&gt; nc -l &lt;span class="m"&gt;80&lt;/span&gt; &amp;lt; index.html &lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;done&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Cependant, le navigateur affiche le texte sans faire le rendu &lt;span class="caps"&gt;HTML&lt;/span&gt;. &lt;code&gt;netcat&lt;/code&gt; ne respectant pas &lt;span class="caps"&gt;HTTP&lt;/span&gt; de base, il faut rajouter un header &lt;span class="caps"&gt;HTTP&lt;/span&gt; minimum : &lt;code&gt;"HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n"&lt;/code&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;(&lt;/span&gt;
+  &lt;span class="nb"&gt;trap&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;exit&amp;quot;&lt;/span&gt; INT &lt;span class="p"&gt;;&lt;/span&gt;
+  &lt;span class="k"&gt;while&lt;/span&gt; &lt;span class="nb"&gt;true&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="k"&gt;do&lt;/span&gt;
+    &lt;span class="o"&gt;{&lt;/span&gt;
+      &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n&amp;quot;&lt;/span&gt; &lt;span class="p"&gt;;&lt;/span&gt;
+      cat index.html
+    &lt;span class="o"&gt;}&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; nc -l &lt;span class="m"&gt;8855&lt;/span&gt; &lt;span class="p"&gt;;&lt;/span&gt;
+  &lt;span class="k"&gt;done&lt;/span&gt;
+&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2 id="pour-aller-plus-loin"&gt;Pour aller plus loin :&lt;a class="headerlink" href="#pour-aller-plus-loin" title="Permanent link"&gt;&amp;para;&lt;/a&gt;&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;vous pouvez installer &lt;code&gt;netcat-traditional&lt;/code&gt; et jouer avec les options &lt;code&gt;-e&lt;/code&gt; et &lt;code&gt;-c&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;on peut utiliser netcat comme scanner de&amp;nbsp;ports&lt;/li&gt;
+&lt;li&gt;on peut crypter les communications en passant la connexion dans un &lt;span class="caps"&gt;SSH&lt;/span&gt; ou en utilisant d&amp;#8217;autres&amp;nbsp;outils&lt;/li&gt;
+&lt;li&gt;Avec des &lt;span class="caps"&gt;FIFO&lt;/span&gt;, on peut faire un &amp;#8220;man-in-the-middle&amp;#8221; pour avoir tous les logs navigateur et serveur dans un fichier tout en continuant à servir le site&amp;nbsp;normalements&lt;/li&gt;
+&lt;li&gt;allez, faites un skype du pauvre avec netcat&amp;nbsp;!&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="sources"&gt;Sources&lt;a class="headerlink" href="#sources" title="Permanent link"&gt;&amp;para;&lt;/a&gt;&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://stackoverflow.com/questions/12266898/start-netcat-server"&gt;Lien &lt;span class="caps"&gt;SO&lt;/span&gt; expliquant comment passer d&amp;#8217;une version traditionelle à une version&amp;nbsp;bsd.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://askubuntu.com/questions/311447/how-do-i-ssh-to-machine-a-via-b-in-one-command"&gt;Lien askubuntu sur le ssh&amp;nbsp;hopping&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://sshmenu.sourceforge.net/articles/transparent-mulithop.html"&gt;Plus d&amp;#8217;infos sur le multi&amp;nbsp;hop&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.g-loaded.eu/2006/11/06/netcat-a-couple-of-useful-examples/"&gt;Quelques utilisations de netcat, j&amp;#8217;en ai repris la&amp;nbsp;plupart&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.thegeekstuff.com/2009/10/how-to-capture-unix-top-command-output-to-a-file-in-readable-format/"&gt;Capture de&amp;nbsp;top&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.commandlinefu.com/commands/view/9164/one-command-line-web-server-on-port-80-using-nc-netcat"&gt;Inspiration pour le serveur web en&amp;nbsp;nc&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://news.ycombinator.com/item?id=1873386"&gt;Cool stuff to do with netcat sur &lt;span class="caps"&gt;HN&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.stearns.org/doc/nc-intro.current.html"&gt;Inspiration pour le serveur web qui fonctionne, proxy &lt;span class="caps"&gt;TCP&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;J&amp;#8217;espère avoir pu vous faire partager la puissance de cet outil. Il ne vous reste plus qu&amp;#8217;à utiliser &lt;code&gt;nc&lt;/code&gt; pour vos débugs réseau et autres geekeries&amp;nbsp;;)&lt;/p&gt;
+&lt;p&gt;Si vous avez d&amp;#8217;autres techniques, n&amp;#8217;hésitez pas à les partager en&amp;nbsp;commentaire.&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Matthieu Falce</dc:creator><pubDate>Thu, 22 Oct 2015 11:03:00 +0200</pubDate><guid>tag:true.falce.net,2015-10-22:a-la-decouverte-de-netcat.html</guid><category>Dev</category><category>Dev web</category><category>netcat</category></item><item><title>Comment avoir plusieurs services web sur son serveur ?</title><link>http://true.falce.net/comment-avoir-plusieurs-services-web-sur-son-serveur.html</link><description>&lt;p&gt;C&amp;#8217;est le genre de questions bêtes que l&amp;#8217;on se pose quand on débute. Les tutoriels parlent de configuration de serveurs et on ne comprend pas l&amp;#8217;intérêt&amp;nbsp;réel.&lt;/p&gt;
 &lt;p&gt;La philosophie de l&amp;#8217;article est plus de découvrir le principe que de fournir une solution clef en main&amp;nbsp;:)&lt;/p&gt;
 &lt;h2 id="le-probleme"&gt;Le problème&lt;a class="headerlink" href="#le-probleme" title="Permanent link"&gt;&amp;para;&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;J&amp;#8217;ai un serveur web (un ordinateur), sur lequel tourne un serveur web (un logiciel, &lt;span class="caps"&gt;NGINX&lt;/span&gt;) qui sert mon site web, sur le port 80&amp;nbsp;donc.&lt;/p&gt;
@@ -68,6 +275,7 @@
 &lt;li&gt;&lt;a href="https://www.nginx.com/resources/admin-guide/serving-static-content/"&gt;nous pouvons servir des contenus statiques avec &lt;code&gt;location&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://nginx.org/en/docs/beginners_guide.html#proxy"&gt;un tutoriel pour débutants (en&amp;nbsp;anglais)&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_set_header"&gt;pour en savoir plus sur les variables du &lt;code&gt;proxy_set_header&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.digitalocean.com/community/tutorials/understanding-nginx-http-proxying-load-balancing-buffering-and-caching"&gt;des explications plus poussées sur le proxy inverse de &lt;span class="caps"&gt;NGINX&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Matthieu Falce</dc:creator><pubDate>Mon, 12 Oct 2015 21:34:00 +0200</pubDate><guid>tag:true.falce.net,2015-10-12:comment-avoir-plusieurs-services-web-sur-son-serveur.html</guid><category>NGINX</category><category>Apache</category><category>serveur web</category><category>proxy</category><category>dev web</category></item><item><title>Découverte de la GoPro Hero 4</title><link>http://true.falce.net/decouverte-de-la-gopro-hero-4.html</link><description>&lt;h2 id="lhistoire"&gt;L&amp;#8217;histoire&lt;a class="headerlink" href="#lhistoire" title="Permanent link"&gt;&amp;para;&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Je suis allé à l&amp;#8217;&lt;span class="caps"&gt;OVH&lt;/span&gt; Summit 2015 à Paris. C&amp;#8217;était bien sympa, bien que je ne pense pas être la cible de l&amp;#8217;événement avec mes 30€ de dépenses par&amp;nbsp;an&amp;#8230;&lt;/p&gt;
 &lt;p&gt;Une des choses qui a rendu l&amp;#8217;événement sympa c&amp;#8217;est les tirages au sort et tombolas, organisés par Cisco, Intel et d&amp;#8217;autres boites que je ne connais&amp;nbsp;pas.&lt;/p&gt;

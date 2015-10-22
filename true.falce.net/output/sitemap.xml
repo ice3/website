@@ -5,29 +5,36 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://true.falce.net/</loc>
-<lastmod>2015-10-12T19:21:33-00:00</lastmod>
+<lastmod>2015-10-22T11:29:28-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://true.falce.net/archives.html</loc>
-<lastmod>2015-10-12T19:21:33-00:00</lastmod>
+<lastmod>2015-10-22T11:29:28-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://true.falce.net/tags.html</loc>
-<lastmod>2015-10-12T19:21:33-00:00</lastmod>
+<lastmod>2015-10-22T11:29:28-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://true.falce.net/categories.html</loc>
-<lastmod>2015-10-12T19:21:33-00:00</lastmod>
+<lastmod>2015-10-22T11:29:28-00:00</lastmod>
 <changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>http://true.falce.net/a-la-decouverte-de-netcat.html</loc>
+<lastmod>2015-10-22T11:03:00+02:00</lastmod>
+<changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
@@ -54,7 +61,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://true.falce.net/category/admin-sys.html</loc>
-<lastmod>2015-10-12T21:34:00+00:09</lastmod>
+<lastmod>2015-10-22T11:03:00+00:09</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -95,6 +102,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>http://true.falce.net/tag/monde.html</loc>
+<lastmod>2015-09-27T19:42:00+00:09</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>http://true.falce.net/tag/serveur-web.html</loc>
 <lastmod>2015-10-12T21:34:00+00:09</lastmod>
 <changefreq>daily</changefreq>
@@ -109,8 +123,8 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
-<loc>http://true.falce.net/tag/monde.html</loc>
-<lastmod>2015-09-27T19:42:00+00:09</lastmod>
+<loc>http://true.falce.net/tag/proxy.html</loc>
+<lastmod>2015-10-12T21:34:00+00:09</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -123,8 +137,8 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
-<loc>http://true.falce.net/tag/proxy.html</loc>
-<lastmod>2015-10-12T21:34:00+00:09</lastmod>
+<loc>http://true.falce.net/tag/dev.html</loc>
+<lastmod>2015-10-22T11:03:00+00:09</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -132,6 +146,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>http://true.falce.net/tag/apache.html</loc>
 <lastmod>2015-10-12T21:34:00+00:09</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>http://true.falce.net/tag/netcat.html</loc>
+<lastmod>2015-10-22T11:03:00+00:09</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -152,14 +173,14 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://true.falce.net/tag/dev-web.html</loc>
-<lastmod>2015-10-12T21:34:00+00:09</lastmod>
+<lastmod>2015-10-22T11:03:00+00:09</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://true.falce.net/author/matthieu-falce.html</loc>
-<lastmod>2015-10-12T21:34:00+00:09</lastmod>
+<lastmod>2015-10-22T11:03:00+00:09</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
