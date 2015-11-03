@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 AUTHOR = u'Matthieu Falce'
 SITENAME = u'true.falce.net'
-SITEURL = 'localhost:8000'
+SITEURL = ''
 
 PATH = 'content'
 
@@ -85,6 +85,3 @@ CUSTOM_MENUITEMS = (('Blog', INDEX_URL),
                     ("Contact / A propos", CONTACT_URL),
                     ("Gallerie Photo", GALLERY_URL),
                     )
-
-DISQUS_SITENAME = "falcenet"
-GOOGLE_ANALYTICS="UA-66606415-1"
