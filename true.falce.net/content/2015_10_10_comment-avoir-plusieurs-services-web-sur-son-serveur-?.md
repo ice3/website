@@ -103,3 +103,4 @@ Il faut juste y aller petit à petit et se concentrer sur une configuration à l
  * [nous pouvons servir des contenus statiques avec `location`](https://www.nginx.com/resources/admin-guide/serving-static-content/)
  * [un tutoriel pour débutants (en anglais)](http://nginx.org/en/docs/beginners_guide.html#proxy)
  * [pour en savoir plus sur les variables du `proxy_set_header`](http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_set_header)
+ * [des explications plus poussées sur le proxy inverse de NGINX](https://www.digitalocean.com/community/tutorials/understanding-nginx-http-proxying-load-balancing-buffering-and-caching)
