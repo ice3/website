@@ -3,8 +3,17 @@ article {margin-top: 1em;}
 div.recent-posts-summary p {
   font: 1em/1.6em 'PT Serif', Georgia, 'Times New Roman', Times, Serif;
   text-align: justify;
-  margin-top: 0.5em;
-  color: #8F8F8F;
+  color: #4F4F4F;
+}
+
+div.recent-posts-summary {
+  margin-top: 1.5em;
+  padding-left: 1em;
+}
+
+
+article > section {
+  margin-top: 1em;
 }
 
 article small {

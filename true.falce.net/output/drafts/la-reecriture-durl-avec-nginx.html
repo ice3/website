@@ -9,7 +9,20 @@
 
         <meta property="og:type" content="article" />
         <meta name="twitter:card" content="summary">
-        <title><span style="color:#002D00;">true.falce.net</span> - Authors</title>
+
+<meta name="keywords" content=", misc, " />
+
+<meta property="og:title" content="La réécriture d’URL avec NGINX "/>
+<meta property="og:url" content="http://true.falce.net/drafts/la-reecriture-durl-avec-nginx.html" />
+<meta property="og:description" content="" />
+<meta property="og:site_name" content="true.falce.net" />
+<meta property="og:article:author" content="Matthieu Falce" />
+<meta property="og:article:published_time" content="2015-10-12T17:58:00+02:00" />
+<meta name="twitter:title" content="La réécriture d’URL avec NGINX ">
+<meta name="twitter:description" content="">
+
+        <title>La réécriture d’URL avec NGINX  · true.falce.net
+</title>
         <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
         <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.1/css/font-awesome.css" rel="stylesheet">
 <link rel="stylesheet" href="http://true.falce.net/theme/css/style.min.css?10252fb8">
@@ -51,10 +64,50 @@
             <div class="row-fluid">
                 <div class="span1"></div>
                 <div class="span10">
-    <h1>Authors on <span style="color:#002D00;">true.falce.net</span></h1>
+<article>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+    <h1><a href="http://true.falce.net/drafts/la-reecriture-durl-avec-nginx.html"> La réécriture d&#8217;<span class="caps">URL</span> avec <span class="caps">NGINX</span>  </a></h1>
+    </header>
+</div>
 
-    <ul>        <li><a href="http://true.falce.net/author/matthieu-falce.html">Matthieu Falce</a> (4)</li>
-    </ul>
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+
+            
+            <p>Le problème c&#8217;est que les URLs transmises au port <code>12345</code> contiennent également <code>/monapp</code> alors que l&#8217;application n&#8217;a pas à savoir comment sont organisées nos <span class="caps">URL</span>.</p>
+<p>On peut l&#8217;éliminer en faisant une réécriture d&#8217;<span class="caps">URL</span> (<em><span class="caps">URL</span> rewritting</em>).</p>
+<div class="highlight"><pre><span class="nt">location</span> <span class="o">/</span><span class="nt">monapp</span><span class="o">/</span> <span class="p">{</span>
+    <span class="n">rewrite</span> <span class="o">^/</span><span class="n">monapp</span><span class="o">/?</span><span class="p">(</span><span class="o">.*</span><span class="p">)</span><span class="err">$</span> <span class="o">/</span><span class="err">$</span><span class="m">1</span> <span class="n">break</span><span class="p">;</span>
+    <span class="n">proxy_pass</span>  <span class="n">http</span><span class="o">://</span><span class="m">127</span><span class="o">.</span><span class="m">0</span><span class="o">.</span><span class="m">0</span><span class="o">.</span><span class="m">1</span><span class="o">:</span><span class="m">12345</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>La réécriture se base sur des expressions régulières. Il faut donc être un minimum à l&#8217;aise avec&nbsp;elles.</p>
+<p>Dans cet exemple, <code>^/monapp/?(.*)$</code> signifie que l&#8217;on va rechercher des <span class="caps">URL</span> commençant par /monapp/ et contenant peut-être quelque chose après et <code>$1</code> représente ce qui a été trouvé&nbsp;précédemment.</p>
+<p>Un exemple pour comprendre : <code>monip.net/monapp/page1.html</code> sera réécrit comme <code>monip.net/page1.html</code> et cette <span class="caps">URL</span> sera transmise au port&nbsp;12345.</p>
+            
+            
+            <hr/>
+        </div>
+        <section>
+        <div class="span2" style="float:right;font-size:0.9em;">
+            <h4>Published</h4>
+            <time pubdate="pubdate" datetime="2015-10-12T17:58:00+02:00">oct. 12, 2015</time>
+            <h4>Category</h4>
+            <a class="category-link" href="http://true.falce.net/categories.html#misc-ref">misc</a>
+<h4>Contact</h4>
+    <a href="http://twitter.com/MatthieuFalce" title="My Twitter Profile" class="sidebar-social-links" target="_blank">
+    <i class="fa fa-twitter sidebar-social-links"></i></a>
+    <a href="http://github.com/ice3" title="My Github Profile" class="sidebar-social-links" target="_blank">
+    <i class="fa fa-github sidebar-social-links"></i></a>
+    <a href="mailto:falce.matthieu+contact@gmail.com" title="My Email Address" class="sidebar-social-links" target="_blank">
+    <i class="fa fa-envelope sidebar-social-links"></i></a>
+        </div>
+        </section>
+</div>
+</article>
                 </div>
                 <div class="span1"></div>
             </div>
@@ -68,7 +121,7 @@
         <li class="elegant-power">Propulsé par <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Thème : <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a> - Adapté et traduit par <a href="http://falce.net" title="Site de Matthieu Falce">Matthieu Falce</a></li>
     </ul>
 </div>
-</footer>        <script src="http://code.jquery.com/jquery.min.js"></script>
+</footer>            <script src="http://code.jquery.com/jquery.min.js"></script>
         <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
         <script>
             function validateForm(query)
@@ -76,6 +129,8 @@
                 return (query.length > 0);
             }
         </script>
+
+    
     </body>
     <!-- Theme: Elegant built for Pelican
     License : http://oncrashreboot.com/pelican-elegant -->
