@@ -6,6 +6,10 @@ div.recent-posts-summary p {
   color: #4F4F4F;
 }
 
+div.recent-posts {
+  margin-top: 4em;
+}
+
 div.recent-posts-summary {
   margin-top: 1.5em;
   padding-left: 1em;
