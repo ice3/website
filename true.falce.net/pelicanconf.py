@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 
 AUTHOR = u'Matthieu Falce'
-SITENAME = u'true.falce.net'
+SITENAME = u'<span style="color:#002D00;">true.falce.net</span>'
 SITEURL = ''
 
 PATH = 'content'
