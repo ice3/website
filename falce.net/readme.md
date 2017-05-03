@@ -17,6 +17,7 @@ Installation gulp :
 sudo add-apt-repository ppa:chris-lea/node.js
 sudo apt-get update
 sudo apt-get install nodejs
-npm install gulp gulp-uncss gulp-cssmin gulp-rename es6-promise## dans le bon répertoire
+npm install gulp gulp-uncss gulp-cssmin gulp-rename es6-promise gulp-debug## dans le bon répertoire
 ```
 
+Utilisation `gulp` (va utiliser le gulpfile.js)
