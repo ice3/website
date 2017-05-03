@@ -604,6 +604,8 @@ ul.social-icons i:hover {
     background-image: url('../img/project-bg.jpg');
     background-repeat: no-repeat;
     background-position: center -20em;
+    background-color: rgba(255,255,255,0.2);
+    background-blend-mode: lighten;
 }
 @media screen and (max-width: 1440px) {
     .projects {
@@ -670,7 +672,7 @@ ul.social-icons i:hover {
 .project-grid figure .project-item-info .sub-heading {
     font-size: 1.1em;
     line-height: 1;
-    color: #fff;
+    color: #111;
 }
 @media screen and (max-width: 992px) {
     .project-grid figure .project-item-info {
@@ -685,7 +687,7 @@ ul.social-icons i:hover {
 @media screen and (min-width: 992px) {
     .project-grid figcaption {
     position: absolute;
-    background: rgba(210, 210, 210, 0.1);
+    background: rgba(210, 210, 210, 0.5);
 }
 }@media screen and (min-width: 992px) {
     .project-effect-shrink figure img {
@@ -717,7 +719,7 @@ ul.social-icons i:hover {
 }
 .project-effect-shrink figure .project-item-info p {
     font-size: 0.9em;
-    color: #fff;
+    color: #222;
     margin-bottom: 5px;
 }
 .project-effect-shrink figure .project-item-info a {
