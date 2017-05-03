@@ -11,11 +11,12 @@ Entièrement écrit à la main en HTML
 
 Stack bower pour minifier les CSS => quand on rajoute une classe CSS d'une lib, il faut recompiler les CSS minifier.
 
-Installation bower :
+Installation gulp :
 
 ```
 sudo add-apt-repository ppa:chris-lea/node.js
 sudo apt-get update
 sudo apt-get install nodejs
-sudo npm install -g gulp
+npm install gulp gulp-uncss gulp-cssmin gulp-rename es6-promise## dans le bon répertoire
 ```
+

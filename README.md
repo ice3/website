@@ -1,6 +1,10 @@
 # website
 une partie des sites sur falce.net
 
+## Page d'acceuil
+
+Lire le readme dans `falce.net`
+
 ## Photos
 
 Pour construire la gallerie, on utilise `sigal` (`pip install sigal`).
