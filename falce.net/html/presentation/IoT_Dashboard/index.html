@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title></title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" href="reveal.js/css/reveal.min.css"/>
+    <style type="text/css">code{white-space: pre;}</style>
+    <link rel="stylesheet" href="reveal.js/css/theme/simple.css" id="theme">
+  <link rel="stylesheet" media="print" href="reveal.js/css/print/pdf.css" />
+  <!--[if lt IE 9]>
+  <script src="reveal.js/lib/js/html5shiv.js"></script>
+  <![endif]-->
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+
+<section id="fullstack-python" class="slide level2">
+<h1>Fullstack python</h1>
+<hr/>
+<div style="margin-bottom: 2em;"></div>
+
+<p>Matthieu Falce -- MF Consulting</p>
+<div style="margin-bottom: 1em;">
+
+</div>
+<p>Meetup Lille.py</p>
+<p>06 juillet 2017</p>
+</section>
+<section><section id="objectifs" class="titleslide slide level1"><h1>Objectifs</h1></section><section id="section" class="slide level2">
+<h1></h1>
+<ul>
+<li>réaliser un capteur IoT (internet of things)</li>
+<li>uniquement en Python (et un peu de HTML)
+<ul>
+<li>accès aux données</li>
+<li>traitement</li>
+<li>affichage</li>
+</ul></li>
+</ul>
+<div style="margin-bottom: 3em;">
+
+</div>
+<p>Intérêt pédagogique seulement...</p>
+</section></section>
+<section><section id="technologies" class="titleslide slide level1"><h1>Technologies</h1></section><section id="gros-plan" class="slide level2">
+<h1>Gros plan</h1>
+<div style="margin-bottom: 3em;">
+
+</div>
+<ul>
+<li>micropython =&gt; récupération d'une température et envoie par port série</li>
+<li>lecture d'un port série en python en arrière plan</li>
+<li>création d'un mini serveur web avec Flask</li>
+<li>création de figures en HTML avec plotly en mode hors ligne</li>
+</ul>
+</section><section id="micropython" class="slide level2">
+<h1>MicroPython</h1>
+<div style="margin-bottom: 3em;">
+
+</div>
+<ul>
+<li>python 3.4 sur microcontroleur (ARM ou PIC)</li>
+<li>shell python sur un µC (tests et le développement)</li>
+<li>(problèmes de performances et empreinte mémoire)</li>
+<li>pour plus d'infos :
+<ul>
+<li><a href="https://micropython.org/">Site officiel</a></li>
+<li><a href="https://github.com/micropython/micropython">Github du projet</a></li>
+</ul></li>
+</ul>
+</section><section id="port-série" class="slide level2">
+<h1>Port série</h1>
+<div style="margin-bottom: 3em;">
+
+</div>
+<ul>
+<li>protocole RS232</li>
+<li>full duplex</li>
+<li>plutôt facile à utiliser</li>
+<li>très utilisé encore de nos jours dans l'IoT</li>
+</ul>
+</section><section id="flask" class="slide level2">
+<h1>Flask</h1>
+<div style="margin-bottom: 2em;">
+
+</div>
+<ul>
+<li>framework web léger</li>
+<li>création facile d'appli WEB</li>
+</ul>
+</section><section id="charting" class="slide level2">
+<h1>Charting</h1>
+<div style="margin-bottom: 3em;">
+
+</div>
+<ul>
+<li><a href="https://matplotlib.org/">matplotlib</a> : la plus répandue en python</li>
+<li><a href="https://plot.ly/">plotly</a> : rendu interactif de figures sur navigateur</li>
+</ul>
+</section></section>
+<section><section id="place-au-code" class="titleslide slide level1"><h1>Place au code</h1></section><section id="section-1" class="slide level2">
+<h1></h1>
+<ul>
+<li>code micropython</li>
+<li>lire les infos sur le port série</li>
+<li>générer un graphique au format HTML avec plotly</li>
+<li>faire le serveur</li>
+<li>tout intégrer</li>
+</ul>
+</section><section id="section-2" class="slide level2">
+<h1></h1>
+<p><img src="/demo.jpg" style="width: 45%; height: 45%"/></p>
+</section></section>
+<section><section id="et-alors" class="titleslide slide level1"><h1>Et alors ?</h1></section><section id="prototypage" class="slide level2">
+<h1>Prototypage</h1>
+<ul>
+<li>facile à mettre en oeuvre</li>
+<li>problème d'intéraction</li>
+<li>pas de persistance</li>
+</ul>
+</section><section id="mieux-faire" class="slide level2">
+<h1>Mieux faire</h1>
+<div style="margin-bottom: 2em;">
+
+</div>
+<ul>
+<li>pas de limites dans les choix technique</li>
+<li>javascript !
+<ul>
+<li>recharger le div avec jquery (#old)</li>
+<li>chart en JS + API avec Flask</li>
+<li>FULL JS EXPERIENCE (Vue.js)</li>
+</ul></li>
+<li>bdd / persistance</li>
+</ul>
+</section><section id="mieux-faire-1" class="slide level2">
+<h1>Mieux faire</h1>
+<div style="margin-bottom: 1em;">
+
+</div>
+<ul>
+<li>intérêt du STM32 vu l'utilisation
+<ul>
+<li>C / C++ et n'importe quel µC</li>
+<li>gestion de la batterie et de la communication</li>
+</ul></li>
+<li>communication sans fil</li>
+</ul>
+</section></section>
+<section><section id="conclusion" class="titleslide slide level1"><h1>Conclusion</h1></section><section id="section-3" class="slide level2">
+<h1></h1>
+<p>Python :</p>
+<ul>
+<li>autre chose que scripts simples</li>
+<li>proto IoT et en web (plus simple que Node ?)</li>
+</ul>
+<hr>
+
+<p><img src="/biohazard.png"/></p>
+<p>Inspiration / découverte / pas en production</p>
+</section><section id="shameless-plug" class="slide level2">
+<h1>Shameless plug</h1>
+<ul>
+<li><a href="https://github.com/Kayoku/iotari/">iotary</a> =&gt; système de capteur sans fils</li>
+<li>si vous avez des projets n'hésitez pas à me contacter (consulting@falce.net)</li>
+</ul>
+</section><section id="merci" class="slide level2">
+<h1>Merci</h1>
+<p><img src="/axolot.png" style="width: 45%; height: 45%"/></p>
+</section></section>
+    </div>
+  </div>
+
+  <script src="reveal.js/lib/js/head.min.js"></script>
+  <script src="reveal.js/js/reveal.min.js"></script>
+
+  <script>
+
+      // Full list of configuration options available here:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+          { src: 'reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+          { src: 'reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+//          { src: 'reveal.js/plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; }, }
+//          { src: 'reveal.js/plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+]});
+    </script>
+  </body>
+</html>
